@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<!-- EDIT 1: Supabase library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
@@ -280,7 +279,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.3px;background:#fff}
   </div>
   <div class="lfoot rv" style="animation-delay:.24s">
    <span>© 2026 Kilifi County KECSHA Welfare Association · Draft constitution pending AGM ratification</span>
-   <span>Data stored securely in the association cloud database</span>
+   <span>Fresh system — enter your own data via Registration</span>
   </div>
  </div>
 </div>
@@ -435,7 +434,7 @@ function crestHTML(s){return S.brand.logo
  :`<span style="display:block;width:${s}px;height:${s}px;filter:drop-shadow(0 4px 12px #0006)">${CREST}</span>`}
 function refreshCrests(){$$('.crest-slot').forEach(el=>el.innerHTML=crestHTML(+el.dataset.size))}
 
-/* ================= STATE ================= */
+/* ================= STATE — EMPTY, READY FOR YOUR OWN DATA ================= */
 const S={
  role:null,page:null,meId:null,
  brand:{logo:null},
@@ -446,14 +445,11 @@ const S={
  audit:[{t:new Date().toLocaleString('en-KE',{dateStyle:'medium',timeStyle:'short'}),ts:Date.now(),who:'System',act:'System initialised',det:'Fresh system — ready for registration and data entry'}],
  ch:[]};
 const REG={photo:null,ben:null,scan:null};
+const PAY={ev:null};
 
-/* =====================================================================
-   SUPABASE-PASTE-HERE — EDIT 2: SUPABASE SYNC LAYER
-   Replace the two values below with YOUR Supabase Project URL and anon key
-   (Supabase Dashboard → Project Settings → API)
-===================================================================== */
-const SUPABASE_URL='https://YOUR-PROJECT.supabase.co';
-const SUPABASE_ANON_KEY='YOUR-ANON-PUBLIC-KEY';
+/* ================= SUPABASE SYNC LAYER ================= */
+const SUPABASE_URL='https://YOUR-PROJECT.supabase.co';   // ← PASTE HERE: your Project URL
+const SUPABASE_ANON_KEY='YOUR-ANON-PUBLIC-KEY';          // ← PASTE HERE: your anon public key
 const DB=(!SUPABASE_URL.includes('YOUR-PROJECT')&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 const S_MAP={members:()=>S.members,contribs:()=>S.contribs,payouts:()=>S.payouts,cases:()=>S.cases,meetings:()=>S.meetings,anns:()=>S.ann,notifs:()=>S.notifs,audit_log:()=>S.audit};
 const LAST={};
@@ -469,7 +465,8 @@ async function persistAll(){if(!DB)return;
   await DB.from('kv').upsert([{key:'settings',value:S.settings},{key:'officers',value:S.officers},{key:'creds',value:S.creds},{key:'brand',value:S.brand}]);
  }catch(e){console.warn('Supabase sync failed',e)}}
 let _pt=null;function queuePersist(){clearTimeout(_pt);_pt=setTimeout(persistAll,800)}
-async function loadAll(){if(!DB){refreshCrests();updateRegBoxes();return}
+async function loadAll(){
+ if(!DB){if(S.creds.admin.p==='admin123')S.creds.admin.p=await sha256('admin123');refreshCrests();updateRegBoxes();return}
  try{
   const names=['members','contribs','payouts','cases','meetings','anns','notifs','audit_log'];
   const ts=await Promise.all(names.map(t=>DB.from(t).select('data,created_at')));
@@ -491,9 +488,8 @@ async function loadAll(){if(!DB){refreshCrests();updateRegBoxes();return}
  const tag=(document.activeElement||{}).tagName;
  if(S.role&&!['INPUT','TEXTAREA','SELECT'].includes(tag))render();
  refreshCrests();updateRegBoxes();}
-/* ================= END SYNC LAYER ================= */
 
-const PAY={ev:null};
+/* ================= HELPERS ================= */
 const ME=()=>S.members.find(m=>m.id===S.meId)||null;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=n=>'KSh '+Number(n).toLocaleString('en-KE');
@@ -515,7 +511,6 @@ const pendContribs=()=>S.contribs.filter(c=>c.status==='Pending Verification');
 const evLink=c=>c.evidence?`<a href="${c.evidence}" target="_blank" style="color:var(--green);font-weight:700">View evidence</a>`:'—';
 function SELF(){if(S.role==='member')return ME();const key=OFFROLE[S.role];return key?S.members.find(x=>x.role===key):null}
 function monthTotals(){const t=MONTHS.map(()=>0);S.contribs.filter(c=>c.status==='Verified').forEach(c=>{const mi=MONTHS.indexOf((c.month||'').split(' ')[0]);if(mi>-1)t[mi]+=c.amt});return MONTHS.map((m,i)=>[m,t[i]])}
-/* EDIT 3a: audit now carries a numeric timestamp for cloud ordering */
 function audit(who,act,det){S.audit.unshift({t:new Date().toLocaleString('en-KE',{dateStyle:'medium',timeStyle:'short'}),ts:Date.now(),who,act,det})}
 function toast(msg,kind){const t=document.createElement('div');t.className='toast'+(kind==='err'?' err':'');t.innerHTML=msg;$('#toasts').appendChild(t);setTimeout(()=>t.classList.add('out'),3800);setTimeout(()=>t.remove(),4350)}
 function countUp(root){root.querySelectorAll('[data-cu]').forEach(el=>{const t=+el.dataset.cu,pre=el.dataset.pre||'',d=900,st=performance.now();(function f(n){const p=Math.min(1,(n-st)/d),e=1-Math.pow(1-p,3);el.textContent=pre+Math.round(t*e).toLocaleString('en-KE');if(p<1)requestAnimationFrame(f)})(st)})}
@@ -682,7 +677,7 @@ admin:{
  ${pc.length?pc.map(m=>regCard(m,'me')).join(''):'<p style="color:var(--mut);font-size:13.5px">No Chairperson registration pending. '+ (S.officers.chair.status==='Active'?'Current chairperson: <b>'+S.officers.chair.name+'</b>':'The office is currently <b>Vacant</b>.')+'</p>'}</div>
  <div class="panel rv"><h3>${ic('users')} Officer register &amp; login credentials</h3>
  ${['chair','secretary','treasurer','admin'].map(k=>{const o=S.officers[k];const mm=S.members.find(x=>x.role===OFFROLE[k]);return `<div class="offc"><div class="oav">${mm&&mm.photo?`<img src="${mm.photo}">`:initials(o.name)}</div><div style="flex:1"><b>${o.name}</b>${mm?`<small>TSC ${mm.tsc} · ID ${mm.idno} · ${mm.school}</small>`:''}<small>${k==='admin'?'System access, branding & settings':k==='chair'?'Association leadership — approved by Administrator':k==='secretary'?'Records, cases & meetings — approved by Chairperson':'Contributions & payments — approved by Chairperson'}</small>
- <div class="credrow">${ic('shield')} Login — username: <b class="mono">${S.creds[k].u}</b> · password: ${S.creds[k].u==='—'?'—':'<b class="mono">••••••</b>'}${k==='admin'?' · change it in System Settings':S.creds[k].u==='—'?' · not issued yet':''}</div></div>${pill(o.status)}</div>`}).join('')}</div>
+ <div class="credrow">${ic('shield')} Login — username: <b class="mono">${S.creds[k].u}</b> · password: <b class="mono">${S.creds[k].p.length>12?'••••••••':S.creds[k].p}</b>${k==='admin'?' · change it in System Settings':S.creds[k].u==='—'?' · not issued yet':''}</div></div>${pill(o.status)}</div>`}).join('')}</div>
  <div class="panel rv"><h3>${ic('lock')} Permission matrix (read-only summary)</h3>${tbl(['Capability','Admin','Chair','Secretary','Treasurer','Member'],`
  <tr><td>Approve &amp; activate Chairperson</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
  <tr><td>Approve members, Secretary &amp; Treasurer</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
@@ -721,7 +716,7 @@ admin:{
 chair:{
  dash(){const pend=pendNonChair();const open=S.cases.filter(c=>c.status!=='Paid'&&c.status!=='Rejected').length;const pendC=S.cases.filter(c=>c.status==='Pending Approval').length;return `
  <div class="tiles">${tile('users','Total Members',S.members.filter(m=>m.status==='Active').length,S.members.filter(m=>m.status==='Pending Verification').length+' pending approval','var(--green)')}${tile('alert','Open Welfare Cases',open,'in documentation or approval','var(--red)')}${tile('stamp','Pending Approvals',pendC,'awaiting your decision','var(--goldD)')}${tile('cal','Upcoming Meetings',S.meetings.length,'scheduled meetings','var(--blue)')}</div>
- ${S.creds.chair.u!=='—'?`<div class="govnote rv">${ic('shield')}<div><b>Your login credentials:</b> username <b class="mono">${S.creds.chair.u}</b> · password is the one registered with. Keep them private (Article 6).</div></div>`:''}
+ ${S.creds.chair.u!=='—'?`<div class="govnote rv">${ic('shield')}<div><b>Your login credentials:</b> username <b class="mono">${S.creds.chair.u}</b> — you use the password you registered with. Keep it private (Article 6).</div></div>`:''}
  ${selfPanel()}
  <div class="panel rv"><h3>${ic('stamp')} Registrations awaiting your approval</h3><p class="psub">Approve members, the Secretary and the Treasurer here. (The Chairperson is approved only by the Administrator.)</p>
  ${pend.length?pend.map(m=>regCard(m,'me')).join(''):'<p style="color:var(--mut);font-size:13.5px">No registrations awaiting your approval.</p>'}</div>
@@ -929,7 +924,7 @@ function render(){const nav=NAVS[S.role];const it=nav.items.find(i=>i[0]===S.pag
  countUp($('#view'));bellCount();refreshCrests();window.scrollTo({top:0})}
 function enterRole(r){S.role=r;S.page='dash';$('#landing').classList.add('hidden');$('#regPage').classList.add('hidden');$('#app').classList.remove('hidden');
  buildNav();render();
- audit(ROLEACT[r],'Sign-in','Signed in to '+persona(r)[1]+' dashboard');queuePersist();
+ audit(ROLEACT[r],'Sign-in','Signed in to '+persona(r)[1]+' dashboard');
  toast(`Signed in as <b>${persona(r)[0]}</b> — ${persona(r)[1]}`)}
 function exit(){S.role=null;$('#app').classList.add('hidden');$('#landing').classList.remove('hidden');$('#bellPanel').classList.add('hidden')}
 function go(p){S.page=p;$('#bellPanel').classList.add('hidden');render()}
@@ -948,26 +943,24 @@ const ACT={
  showauth:()=>{$('#regPage').classList.add('hidden');$('#landing').classList.remove('hidden')},
  regphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{REG.photo=d;updateRegBoxes();toast(`${ic('cam')} Your photo cropped to <b>35 × 45 mm</b>`)})),
  regben:()=>pickFile(src=>openCrop(src,45/35,d=>{REG.ben=d;updateRegBoxes();toast(`${ic('cam')} Beneficiary photo cropped to <b>35 × 45 mm</b>`)})),
- /* EDIT 4e: scans & evidence are compressed before saving to the cloud */
  regscan:()=>pickFile(async src=>{REG.scan=await compressImage(src);updateRegBoxes();toast(`${ic('doc')} Scanned ID card attached`)}),
  payev:()=>pickFile(async src=>{PAY.ev=await compressImage(src);renderPayPreview();toast(`${ic('doc')} Payment evidence attached`);queuePersist()}),
  payevclear:()=>{PAY.ev=null;renderPayPreview()},
- myphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{ME().photo=d;audit('Member','Own photo updated',ME().name+' · 35 × 45 mm');render();toast('Your 35 × 45 mm photo has been updated')})),
- benphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{ME().ben.photo=d;audit('Member','Beneficiary photo updated',ME().name+' → '+ME().ben.n);render();toast('Beneficiary photo updated — pending Secretary verification')})),
- setphoto:id=>pickFile(src=>openCrop(src,45/35,d=>{const m=S.members.find(x=>x.id===id);m.photo=d;audit(ROLEACT[S.role],'Member photo uploaded',m.name+' · 35 × 45 mm cropped');render();toast(`Photo saved for <b>${m.name}</b> — 35 × 45 mm`)})),
- logo:()=>pickFile(src=>openCrop(src,1,d=>{S.brand.logo=d;audit('System Administrator','Association logo uploaded','Branding applied system-wide');render();toast(`${ic('stamp')} Association logo uploaded and applied system-wide`)})),
+ myphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{ME().photo=d;audit('Member','Own photo updated',ME().name+' · 35 × 45 mm');render();queuePersist();toast('Your 35 × 45 mm photo has been updated')})),
+ benphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{ME().ben.photo=d;audit('Member','Beneficiary photo updated',ME().name+' → '+ME().ben.n);render();queuePersist();toast('Beneficiary photo updated — pending Secretary verification')})),
+ setphoto:id=>pickFile(src=>openCrop(src,45/35,d=>{const m=S.members.find(x=>x.id===id);m.photo=d;audit(ROLEACT[S.role],'Member photo uploaded',m.name+' · 35 × 45 mm cropped');render();queuePersist();toast(`Photo saved for <b>${m.name}</b> — 35 × 45 mm`)})),
+ logo:()=>pickFile(src=>openCrop(src,1,d=>{S.brand.logo=d;audit('System Administrator','Association logo uploaded','Branding applied system-wide');render();queuePersist();toast(`${ic('stamp')} Association logo uploaded and applied system-wide`)})),
  resetlogo:()=>{S.brand.logo=null;audit('System Administrator','Logo reset','Reverted to default crest');render();toast('Reverted to the default crest')},
- /* EDIT 4f: approval toasts no longer reveal passwords */
  approvechair:id=>{const m=S.members.find(x=>x.id===id);if(!m)return;
   m.status='Active';m.role='Chairperson';m.position='Chairperson';m.joined=today();
   S.officers.chair={name:m.name,status:'Active'};S.creds.chair={u:m.user,p:m.pass};
-  audit('System Administrator','Chairperson approved & activated',`${m.name} · ${m.id} · TSC ${m.tsc} · login ${m.user}`);
+  audit('System Administrator','Chairperson approved & activated',`${m.name} · ${m.id} · TSC ${m.tsc} · username ${m.user}`);
   render();toast(`${ic('stamp')} <b>${m.name}</b> approved &amp; activated as Chairperson — login username: <b>${m.user}</b> (password is the one they registered with)`);},
  approvemem:id=>{const m=S.members.find(x=>x.id===id);if(!m)return;
   m.status='Active';m.joined=today();
   const posKey={Secretary:'secretary',Treasurer:'treasurer'}[m.position];
   if(posKey){S.officers[posKey]={name:m.name,status:'Active'};S.creds[posKey]={u:m.user,p:m.pass};m.role=m.position}
-  audit('Chairperson','Registration approved & activated',`${m.name} · ${m.id} · position ${m.position} · login ${m.user}`);
+  audit('Chairperson','Registration approved & activated',`${m.name} · ${m.id} · position ${m.position} · username ${m.user}`);
   render();toast(`${ic('stamp')} <b>${m.name}</b> approved &amp; activated — login username: <b>${m.user}</b> (password is the one they registered with)`);},
  declinemem:id=>{const m=S.members.find(x=>x.id===id);const r=prompt('Reason for declining (recorded in audit trail):');if(r===null)return;m.status='Declined';audit(ROLEACT[S.role],'Registration declined',m.name+' — '+r);render();toast(`Registration for ${m.name} declined`,'err')},
  vpay:id=>{const c=S.contribs.find(x=>x.id===id);if(!c||c.status!=='Pending Verification')return;
@@ -1001,23 +994,24 @@ const ACT={
 
 /* ================= FORMS ================= */
 const FORMS={
- /* EDIT 4a: login now compares secure password hashes */
- async login(fd){const off=fd.get('office'),u=(fd.get('user')||'').trim().toLowerCase(),p=fd.get('pass');
+async login(fd){const off=fd.get('office'),u=(fd.get('user')||'').trim().toLowerCase(),p=fd.get('pass');
   if(!u||!p){toast('Enter your username and password','err');return}
   const hp=await sha256(p);
+  const ok=stored=>stored===hp||stored===p;  /* accepts hashed OR not-yet-migrated */
   if(off==='member'){
    const m=S.members.find(x=>x.user===u||x.id.toLowerCase()===u||x.idno===u||x.name.toLowerCase()===u);
    if(!m){toast('Username not found — please register first','err');return}
-   if(m.pass!==hp){toast('Incorrect password for <b>'+m.name+'</b>','err');return}
+   if(!ok(m.pass)){toast('Incorrect password for <b>'+m.name+'</b>','err');return}
+   if(m.pass===p&&m.pass!==hp){m.pass=hp;queuePersist()}
    if(m.status==='Pending Verification'){toast('Your registration is <b>awaiting '+(m.position==='Chairperson'?'the Administrator\u2019s':'the Chairperson\u2019s')+' approval</b>. Please check back shortly.','err');return}
    if(m.status==='Declined'){toast('This registration was declined — contact the Secretary.','err');return}
    S.meId=m.id}
   else{const cr=S.creds[off];
-   if(cr.u==='—'){toast('This office has not been activated yet — the '+(off==='chair'?'Chairperson must register and be approved by the Administrator':'Secretary/Treasurer must be approved by the Chairperson')+'.','err');return}
-   if(u!==cr.u||hp!==cr.p){toast('Incorrect username or password for this office','err');return}}
+   if(cr.u==='—'){toast('This office has not been activated yet.','err');return}
+   if(u!==cr.u||!ok(cr.p)){toast('Incorrect username or password for this office','err');return}
+   if(cr.p===p&&cr.p!==hp){cr.p=hp;queuePersist()}}
   enterRole(off)},
- /* EDIT 4b: registration stores a hashed password */
- async register(fd){const g=k=>(fd.get(k)||'').trim();
+async register(fd){const g=k=>(fd.get(k)||'').trim();
   const req={name:'Full name',tsc:'TSC number',idno:'ID number',phone:'Phone number',school:'School',bn:'Beneficiary name',bid:'Beneficiary ID number',bphone:'Beneficiary phone',kn:'Next of kin name',kid:'Next of kin ID',kphone:'Next of kin phone',user:'Username',pass:'Password'};
   const missing=Object.keys(req).filter(k=>!g(k));
   if(missing.length){toast('Missing: '+missing.map(k=>req[k]).join(', '),'err');return}
@@ -1041,15 +1035,14 @@ const FORMS={
   $('#regForm').reset();$('#consent').checked=false;
   ACT.showauth();
   toast(`${ic('stamp')} Registration received — number <b>${id}</b>. ${g('position')==='Chairperson'?'The Administrator will approve &amp; activate you.':'The Chairperson will approve &amp; activate you.'} Then sign in with username <b>${uu}</b> and your password.`)},
- /* EDIT 4c: admin password change stores a hash */
- async changeAdminPass(fd){const cur=fd.get('cur'),nw=fd.get('new'),cf=fd.get('confirm');
-  if(cur!==S.creds.admin.p&&await sha256(cur)!==S.creds.admin.p){toast('Current password is incorrect','err');return}
+async changeAdminPass(fd){const cur=fd.get('cur'),nw=fd.get('new'),cf=fd.get('confirm');
+  const hpCur=await sha256(cur);
+  if(S.creds.admin.p!==hpCur&&S.creds.admin.p!==cur){toast('Current password is incorrect','err');return}
   if(nw.length<6){toast('New password must be at least 6 characters','err');return}
   if(nw!==cf){toast('New passwords do not match','err');return}
   S.creds.admin.p=await sha256(nw);audit('System Administrator','Password changed','Administrator password updated');render();toast(`${ic('stamp')} Administrator password changed successfully`)},
  settings(fd){const s=S.settings;s.min=+fd.get('min')||s.min;s.death=+fd.get('death')||s.death;s.emer=+fd.get('emer')||s.emer;s.sms=fd.get('sms')==='Enabled';s.dual=fd.get('dual')==='Required';audit(ROLEACT[S.role],'Welfare parameters updated',`Min ${money(s.min)} · Death ${money(s.death)} · Emergency cap ${money(s.emer)}`);render();toast('Parameters saved and logged to the audit trail')},
- /* EDIT 4d: temporary office-entry password is hashed */
- async addMember(fd){const id='KCW-'+String(S.members.length+1).padStart(3,'0');const nm=fd.get('name');S.members.push({id,name:nm,school:fd.get('school'),phone:fd.get('phone')||'—',tsc:fd.get('tsc')||'—',idno:fd.get('idno')||'—',position:'Member',role:'—',joined:'—',status:'Pending Verification',months:0,total:0,photo:null,scan:null,user:id.toLowerCase(),pass:await sha256('kecsha2026'),ben:{n:'None on file',id:'—',r:'—',p:'—',s:'Not Registered',photo:null},nok:{n:'—',id:'—',p:'—'}});
+async addMember(fd){const id='KCW-'+String(S.members.length+1).padStart(3,'0');const nm=fd.get('name');S.members.push({id,name:nm,school:fd.get('school'),phone:fd.get('phone')||'—',tsc:fd.get('tsc')||'—',idno:fd.get('idno')||'—',position:'Member',role:'—',joined:'—',status:'Pending Verification',months:0,total:0,photo:null,scan:null,user:id.toLowerCase(),pass:await sha256('kecsha2026'),ben:{n:'None on file',id:'—',r:'—',p:'—',s:'Not Registered',photo:null},nok:{n:'—',id:'—',p:'—'}});
  audit('Secretary','Member registered (office entry)',`${nm} · ${fd.get('school')} · TSC ${fd.get('tsc')||'—'} · ${id} — pending Chairperson's approval`);
  render();toast(`${ic('users')} <b>${nm}</b> registered as ${id} — awaiting the Chairperson's approval. Temp login <b>${id.toLowerCase()}</b> / kecsha2026`)},
  payCon(fd){const me=SELF();if(!me){toast('No member record is linked to this office yet','err');return}
@@ -1086,7 +1079,6 @@ const FORMS={
  profile(fd){const me=ME();me.phone=fd.get('phone');me.nok.p=fd.get('kp')||me.nok.p;render();toast('Contact details updated')}};
 
 /* ================= EVENTS & INIT ================= */
-/* EDIT 3b/3c: every click and every form submission now triggers a cloud save */
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act;
  if(a==='nav'&&el.id&&el.id.startsWith('nb-'))go(el.dataset.id);else if(ACT[a]){ACT[a](el.dataset.id,el);queuePersist()}});
 document.addEventListener('submit',e=>{const f=e.target;if(f.dataset.form){e.preventDefault();FORMS[f.dataset.form](new FormData(f));queuePersist()}});
@@ -1101,7 +1093,6 @@ cw.addEventListener('pointermove',e=>{if(!drag)return;CR.dx=e.clientX-drag.x;CR.
 cw.addEventListener('pointerup',()=>drag=null);
 cw.addEventListener('pointercancel',()=>drag=null)})();
 setInterval(()=>{const n=new Date();const t=$('#clkT');if(t){t.textContent=n.toLocaleTimeString('en-KE');$('#clkD').textContent=n.toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · EAT'}},1000);
-/* EDIT 3d: load cloud data on start, and re-sync whenever the page/tab becomes visible */
 loadAll();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadAll()});
 </script>
