@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kilifi County KECSHA Welfare Association</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!-- EDIT 1: Supabase library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+ --deep:#062A1F; --green:#0C4634; --green2:#0E5A42; --green3:#E7EFE6;
+ --paper:#F3F4EC; --card:#FFFFFF; --line:#DBE0D1; --ink:#132B22; --mut:#64715F;
+ --gold:#E7A83A; --goldD:#A97911; --red:#C14B31; --teal:#1E7A6F; --blue:#2F6DA3;
+ --disp:'Bricolage Grotesque',sans-serif; --body:'Public Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.55}
+h1,h2,h3,h4{font-family:var(--disp)}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+.hidden{display:none!important}
+.mono{font-family:var(--mono)}
+.band{height:6px;background:repeating-linear-gradient(90deg,var(--deep) 0 26px,var(--red) 26px 52px,var(--gold) 52px 78px,var(--teal) 78px 104px)}
+.ic{width:17px;height:17px;flex:none}
+#landing{min-height:100vh;background:
+ radial-gradient(circle at 85% 20%, #0E5A4233 0 340px, transparent 341px),
+ radial-gradient(#0E5A4240 1.2px, transparent 1.3px) 0 0/26px 26px,
+ linear-gradient(160deg,var(--deep) 0%,#08342680 100%), var(--deep);
+ color:#EAF1E7;animation:bgdrift 60s linear infinite}
+@keyframes bgdrift{to{background-position:0 0,520px 260px,0 0,0 0}}
+.lwrap{max-width:1220px;margin:0 auto;padding:26px 28px}
+.lhead{display:flex;align-items:center;gap:14px;justify-content:space-between;border-bottom:1px solid #ffffff22;padding-bottom:18px}
+.brand{display:flex;gap:13px;align-items:center}
+.brand b{font-family:var(--disp);font-size:17px;letter-spacing:.3px;display:block;line-height:1.2}
+.brand small{color:#cfdccb;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.lest{font-size:12.5px;color:#cfdccb;text-align:right;line-height:1.5}
+.lgrid{display:grid;grid-template-columns:1.1fr .95fr;gap:48px;padding:52px 0 30px;align-items:start}
+.overline{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.lgrid h1{font-size:clamp(34px,4vw,54px);line-height:1.06;font-weight:800;margin:14px 0 16px;letter-spacing:-.5px}
+.lgrid h1 em{font-style:normal;color:var(--gold)}
+.swa{font-size:15.5px;color:#d8e4d2;max-width:52ch;border-left:3px solid var(--gold);padding-left:14px}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.fact{border:1px solid #ffffff2e;border-radius:9px;padding:9px 14px;font-size:13px;background:#ffffff0d;display:flex;gap:8px;align-items:center}
+.fact b{font-family:var(--mono);color:var(--gold)}
+.gate{background:#0A3A2B;border:1px solid #ffffff20;border-radius:16px;padding:26px;box-shadow:0 30px 60px #00000055}
+.gate h2{font-size:21px;margin-bottom:4px}
+.gate p{color:#c4d3c0;font-size:13.5px;margin-bottom:16px}
+.hint{font-size:11.8px;color:#8fa792;margin-top:12px;line-height:1.65}
+.lfoot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 0 8px;border-top:1px solid #ffffff20;color:#aebda9;font-size:12.5px}
+#regPage{min-height:100vh;background:var(--paper)}
+.regwrap2{max-width:1000px;margin:0 auto;padding:30px 26px 80px}
+.reghead{display:flex;gap:14px;align-items:center;margin-bottom:24px;flex-wrap:wrap}
+.reghead h2{font-size:27px;letter-spacing:-.3px}
+.reghead .overline{color:var(--goldD)}
+.reghead p{color:var(--mut);font-size:13px}
+.sect{background:#fff;border:1px solid var(--line);border-radius:13px;padding:22px;margin-bottom:18px;border-top:4px solid var(--gold)}
+.sect h3{font-size:16.5px;margin-bottom:2px}
+.sect>.psub{font-size:12.8px;color:var(--mut);margin-bottom:15px}
+.regcols{display:grid;grid-template-columns:1fr 175px;gap:20px}
+.form3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;align-content:start}
+.upbox{border:2px dashed var(--line);border-radius:10px;min-height:150px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;text-align:center;padding:10px;color:var(--mut);font-size:11.5px;line-height:1.5;background:#FDFDF9}
+.upbox img.ph-prev{width:105px;height:135px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.upbox img.ev-prev{max-width:100%;max-height:150px;border-radius:6px;border:1px solid var(--line)}
+.upbox img.scan-prev{max-width:100%;max-height:130px;border-radius:6px;border:1px solid var(--line)}
+.consent{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink);margin:2px 0 16px}
+.consent input{width:auto;margin-top:3px}
+#app{display:grid;grid-template-columns:264px 1fr;min-height:100vh}
+aside{background:linear-gradient(180deg,var(--deep),#0A3A2B);color:#EAF1E7;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.sbrand{display:flex;gap:11px;align-items:center;padding:20px 18px;border-bottom:1px solid #ffffff1a}
+.sbrand b{font-family:var(--disp);font-size:14px;line-height:1.25;display:block}
+.sbrand small{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#b9c9b4}
+#nav{padding:14px 10px;flex:1;overflow:auto}
+#nav .rlab{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8fa792;padding:8px 12px 6px}
+#nav button{display:flex;gap:11px;align-items:center;width:100%;background:none;border:none;color:#d5e2d1;padding:10px 12px;border-radius:9px;font-size:13.8px;font-weight:500;text-align:left;position:relative;transition:.18s;margin-bottom:2px}
+#nav button:hover{background:#ffffff12;color:#fff;padding-left:16px}
+#nav button.on{background:#ffffff18;color:#fff;font-weight:700}
+#nav button.on::before{content:'';position:absolute;left:-10px;top:8px;bottom:8px;width:4px;border-radius:4px;background:var(--gold)}
+#nav button .cnt{margin-left:auto;background:var(--gold);color:var(--deep);font-size:10.5px;font-weight:700;border-radius:20px;padding:1px 7px;font-family:var(--mono)}
+.sfoot{padding:14px 18px;border-top:1px solid #ffffff1a}
+.sfoot .zz{height:8px;border-radius:4px;background:repeating-linear-gradient(135deg,var(--gold) 0 6px,var(--red) 6px 12px,var(--deep) 12px 18px,var(--teal) 18px 24px);margin-bottom:10px}
+.sfoot p{font-size:11.5px;color:#a9bca6;font-style:italic}
+main{display:flex;flex-direction:column;min-width:0}
+.topbar{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--line)}
+.topin{max-width:1180px;margin:0 auto;padding:14px 30px;display:flex;align-items:center;gap:18px}
+.pghead h2{font-size:22px;font-weight:800;letter-spacing:-.3px}
+.pghead p{font-size:12.5px;color:var(--mut)}
+.clock{margin-left:auto;text-align:right;font-size:12.5px;color:var(--mut);line-height:1.4}
+.clock b{font-family:var(--mono);font-size:14px;color:var(--ink);display:block}
+.bellwrap{position:relative}
+.bellbtn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;position:relative;transition:.2s}
+.bellbtn:hover{border-color:var(--gold);transform:translateY(-2px)}
+.bellbtn .dot{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;font-family:var(--mono);padding:0 4px}
+.bellpanel{position:absolute;right:0;top:48px;width:330px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 50px #0c463426;padding:8px;z-index:60}
+.bellpanel .bp{padding:10px 12px;border-radius:8px;font-size:13px;border-bottom:1px solid #f0f2ea}
+.bellpanel .bp:last-of-type{border:none}
+.bellpanel .bp.unread{background:#FBF4E4}
+.uchip{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px 6px 7px}
+.uchip .av{width:38px;height:49px;border-radius:7px;object-fit:cover;background:var(--green);color:var(--gold);display:grid;place-items:center;font-family:var(--disp);font-weight:800;font-size:14px;overflow:hidden;flex:none;border:1px solid var(--line)}
+.uchip .av img{width:100%;height:100%;object-fit:cover;display:block}
+.uchip b{font-size:12.8px;display:block;line-height:1.25}
+.uchip small{font-size:11px;color:var(--mut)}
+.outbtn{border:none;background:none;color:var(--red);font-size:12px;font-weight:700;margin-left:8px}
+.outbtn:hover{text-decoration:underline}
+#view{max-width:1180px;width:100%;margin:0 auto;padding:28px 30px 70px}
+.rv{opacity:0;transform:translateY(14px);animation:fup .55s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes fup{to{opacity:1;transform:none}}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px;margin-bottom:24px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 18px 15px;position:relative;overflow:hidden;transition:.22s}
+.tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tc,var(--green2))}
+.tile:hover{transform:translateY(-4px);box-shadow:0 16px 32px #0C463417}
+.tile .tl{font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);font-weight:700;display:flex;gap:8px;align-items:center}
+.tile .tl .ic{color:var(--tc,var(--green2))}
+.tile .tv{font-family:var(--mono);font-size:29px;font-weight:600;margin:8px 0 3px;letter-spacing:-.5px}
+.tile .ts{font-size:12.3px;color:var(--mut)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px;margin-bottom:18px;transition:.2s}
+.panel:hover{box-shadow:0 12px 30px #0C46340F}
+.panel>h3{font-size:16.5px;font-weight:800;display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.panel>h3 .ic{color:var(--goldD)}
+.panel>.psub{font-size:12.8px;color:var(--mut);margin-bottom:14px}
+.twrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.3px;background:#fff}
+.tbl th{background:var(--green3);text-align:left;padding:9px 12px;font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--green);border-bottom:2px solid var(--line);white-space:nowrap}
+.tbl td{padding:9px 12px;border-bottom:1px solid #EEF0E7;vertical-align:middle}
+.tbl tbody tr{transition:.15s}
+.tbl tbody tr:hover{background:#FBFCF6}
+.tbl tr:last-child td{border-bottom:none}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2.5px 9px;border-radius:20px;white-space:nowrap}
+.p-g{background:#DDEFE0;color:#166534}.p-y{background:#FBEECB;color:#8a6100}.p-r{background:#F9DED7;color:#9a3412}
+.p-b{background:#DCEAF7;color:#1d4f7c}.p-gr{background:#E7E9E2;color:#5a6459}
+.btn{display:inline-flex;gap:8px;align-items:center;border-radius:9px;border:1px solid transparent;padding:9px 16px;font-size:13.5px;font-weight:700;transition:.18s;text-decoration:none}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--green);color:#fff}.btn.pri:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 8px 18px #0C463438}
+.btn.gld{background:var(--gold);color:var(--deep)}.btn.gld:hover{background:#F2BC57;transform:translateY(-2px)}
+.btn.gho{background:#fff;border-color:var(--line);color:var(--ink)}.btn.gho:hover{border-color:var(--green);color:var(--green)}
+.btn.dng{background:#fff;border-color:#E4B5A8;color:var(--red)}.btn.dng:hover{background:#FBEFEA}
+.btn.sm{padding:5px 11px;font-size:12px;border-radius:7px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+.locknote{display:flex;gap:12px;align-items:flex-start;background:#FBF4E4;border:1px solid #E9D8A6;border-left:4px solid var(--gold);border-radius:10px;padding:13px 16px;font-size:13px;margin-bottom:18px}
+.locknote .ic{color:var(--goldD);margin-top:2px}
+.locknote b{color:var(--goldD)}
+.govnote{display:flex;gap:12px;background:var(--green3);border:1px solid #c7d8c0;border-left:4px solid var(--green2);border-radius:10px;padding:13px 16px;font-size:13px;margin-bottom:18px}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}
+.form.full{grid-template-columns:1fr}
+.field label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#FDFDF9;transition:.15s;color:var(--ink)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green2);box-shadow:0 0 0 3px #0E5A4222;background:#fff}
+.flow{display:flex;align-items:stretch;flex-wrap:wrap;margin:8px 0 4px}
+.fstep{flex:1;min-width:150px;background:#FDFDF9;border:1px solid var(--line);border-radius:10px;padding:12px 14px;position:relative}
+.fstep b{font-family:var(--disp);font-size:13.5px;display:block}
+.fstep span{font-size:11.8px;color:var(--mut)}
+.fstep:not(:last-child)::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--goldD);font-weight:800;font-size:17px;z-index:2}
+.flow .fstep:not(:last-child){margin-right:26px}
+.chart{display:flex;align-items:flex-end;gap:10px;height:170px;padding:12px 4px 0}
+.chart .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%}
+.chart .bar i{width:100%;max-width:44px;background:linear-gradient(180deg,var(--gold),#c98a17);border-radius:6px 6px 2px 2px;transition:.3s;min-height:4px}
+.chart .bar:hover i{background:linear-gradient(180deg,var(--green2),var(--green))}
+.chart .bar em{font-style:normal;font-size:11px;color:var(--mut)}
+.chart .bar u{text-decoration:none;font-family:var(--mono);font-size:10.5px;color:var(--green);font-weight:600}
+.caserow{border:1px solid var(--line);border-radius:11px;padding:15px 16px;margin-bottom:12px;background:#FDFDF9;transition:.2s}
+.caserow:hover{border-color:#c9b06a;box-shadow:0 8px 22px #0C463410}
+.caserow .ch{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
+.caserow .ch b{font-family:var(--disp);font-size:15px}
+.caserow .ch .amt{margin-left:auto;font-family:var(--mono);font-weight:600;font-size:16px;color:var(--green)}
+.docchip{display:inline-flex;gap:6px;align-items:center;font-size:11.5px;border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin:3px 4px 0 0;background:#fff;color:var(--mut)}
+.docchip.ok{border-color:#9CCBA4;background:#EAF6EC;color:#166534;font-weight:600}
+.actions{margin-top:11px;display:flex;gap:8px;flex-wrap:wrap}
+.ann{border-left:3px solid var(--gold);padding:10px 14px;background:#FDFDF9;border-radius:0 9px 9px 0;margin-bottom:10px;font-size:13.5px}
+.ann small{display:block;color:var(--mut);font-size:11.5px;margin-bottom:2px}
+.kv{display:grid;grid-template-columns:170px 1fr;gap:7px 14px;font-size:13.5px}
+.kv dt{color:var(--mut);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.kv dd{font-weight:500}
+.resp th:first-child{width:200px}
+.offc{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:15px;background:#FDFDF9;margin-bottom:12px;flex-wrap:wrap}
+.offc .oav{width:46px;height:59px;border-radius:8px;background:var(--green);color:var(--gold);display:grid;place-items:center;font-family:var(--disp);font-weight:800;font-size:15px;flex:none;overflow:hidden}
+.offc .oav img{width:100%;height:100%;object-fit:cover}
+.offc b{font-family:var(--disp)}
+.offc small{display:block;color:var(--mut);font-size:12px}
+.credrow{background:#FDF6E4;border:1px dashed #E0C77F;border-radius:7px;padding:6px 10px;font-size:12px;margin-top:6px;color:#7a5b12}
+.photo{width:35px;height:45px;object-fit:cover;border-radius:3px;border:1px solid var(--line);background:#fff;display:block}
+.photo.big{width:105px;height:135px;border-radius:7px;box-shadow:0 6px 16px #0C463422}
+.ph{display:grid;place-items:center;background:var(--green3);color:var(--green);font-family:var(--disp);font-weight:800;font-size:11px}
+.ph.big{font-size:26px}
+.cmodal{position:fixed;inset:0;background:#062A1Fcc;backdrop-filter:blur(4px);z-index:300;display:grid;place-items:center;animation:fup .3s forwards}
+.cbox{background:var(--paper);border-radius:16px;padding:26px;box-shadow:0 40px 80px #0008;text-align:center;max-width:94vw;border-top:5px solid var(--gold)}
+.cbox h3{font-size:19px}
+.cbox .psub{font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.cropwrap{width:280px;margin:14px auto;position:relative;overflow:hidden;border:2px dashed var(--gold);border-radius:8px;background:repeating-conic-gradient(#e8eae2 0 25%,#fff 0 50%) 0 0/20px 20px;cursor:grab;touch-action:none}
+.cropwrap:active{cursor:grabbing}
+#cropImg{position:absolute;left:50%;top:50%;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.zoomlab{display:flex;gap:10px;align-items:center;justify-content:center;font-size:12.5px;color:var(--mut);margin-bottom:14px}
+.cbox .actions{justify-content:center}
+.constit{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start}
+.constit nav{position:sticky;top:96px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.constit nav b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--goldD);display:block;margin-bottom:8px}
+.constit nav a{display:block;font-size:12.5px;color:var(--mut);text-decoration:none;padding:4px 6px;border-radius:6px;transition:.15s}
+.constit nav a:hover{background:var(--green3);color:var(--green)}
+.constit .doc{background:#fff;border:1px solid var(--line);border-radius:13px;padding:34px 38px}
+.constit .doc .chead{text-align:center;border-bottom:3px double var(--gold);padding-bottom:20px;margin-bottom:24px}
+.constit .doc .chead h3{font-size:23px}
+.constit .doc .chead p{font-size:12.5px;color:var(--mut);margin-top:6px}
+.part{margin-bottom:26px}
+.part>h4{font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:#fff;background:var(--green);display:inline-block;padding:5px 13px;border-radius:6px;margin-bottom:10px}
+.art{margin-bottom:16px}
+.art h5{font-family:var(--disp);font-size:15px;margin-bottom:5px}
+.art ol{padding-left:22px;font-size:13.6px}
+.art ol li{margin-bottom:5px}
+#toasts{position:fixed;bottom:22px;right:22px;z-index:400;display:flex;flex-direction:column;gap:9px}
+.toast{background:var(--deep);color:#EAF1E7;padding:12px 18px;border-radius:10px;font-size:13.5px;box-shadow:0 18px 40px #0006;border-left:4px solid var(--gold);animation:tin .35s cubic-bezier(.2,.9,.3,1.3);max-width:380px}
+.toast.err{border-left-color:var(--red)}
+.toast.out{opacity:0;transform:translateX(30px);transition:.45s}
+@keyframes tin{from{opacity:0;transform:translateX(60px)}}
+.gate.auth .field label{color:#F0DCA2!important;font-size:12px!important;margin-bottom:6px!important;display:block!important}
+.gate.auth input,.gate.auth select{width:100%!important;padding:12px 13px!important;border-radius:9px!important;border:1.5px solid #C9B06A!important;background:#FFFFFF!important;color:#132B22!important;margin-bottom:14px!important;display:block!important;font-weight:500!important}
+.gate.auth input::placeholder{color:#98a094!important;font-weight:400!important}
+.gate.auth select option{color:#132B22;background:#fff}
+.gate.auth input:focus,.gate.auth select:focus{outline:none!important;border-color:var(--gold)!important;box-shadow:0 0 0 3px #E7A83A44!important}
+.gate.auth .btn{width:100%;justify-content:center}
+@media(max-width:980px){
+ #app{grid-template-columns:1fr}
+ aside{position:static;height:auto}
+ #nav{display:flex;flex-wrap:wrap}
+ .lgrid,.grid2,.constit,.regcols{grid-template-columns:1fr}
+ .constit nav{position:static}
+ .fstep:not(:last-child)::after{display:none}
+ .flow .fstep{margin:0 0 8px!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LANDING / SIGN IN ================= -->
+<div id="landing">
+ <div class="band"></div>
+ <div class="lwrap">
+  <div class="lhead rv">
+   <div class="brand">
+    <span class="crest-slot" data-size="56"></span>
+    <div><b>Kilifi County KECSHA<br>Welfare Association</b><small>Head Teachers · Kilifi County</small></div>
+   </div>
+   <div class="lest">Registered welfare association<br>Kilifi · Kenya · Est. 2023</div>
+  </div>
+  <div class="lgrid">
+   <div class="rv" style="animation-delay:.08s">
+    <div class="overline">Mfuko wa Misaada · Head Teachers' Welfare Fund</div>
+    <h1>Those who lead our schools <em>should never</em> carry grief alone.</h1>
+    <p class="swa">“Haba na haba hujaza kibaba.” — From KSh 1,000 a month, we build a fund that stands beside every head teacher in Kilifi County through death, emergency and need.</p>
+    <div class="facts">
+     <div class="fact"><b>KSh 1,000</b> minimum monthly contribution</div>
+     <div class="fact"><b>KSh 150,000</b> death benefit → written beneficiary</div>
+     <div class="fact"><b>KSh 30,000</b> emergency assistance cap</div>
+     <div class="fact"><b>35 × 45 mm</b> member &amp; beneficiary photos</div>
+    </div>
+   </div>
+
+   <div class="gate rv auth" style="animation-delay:.16s">
+    <h2>Sign in</h2>
+    <p>Select your role, enter your username and password.</p>
+    <form data-form="login" id="loginForm">
+     <div class="field"><label>Role *</label><select name="office" id="officeSel">
+      <option value="member" selected>Member / Head Teacher</option>
+      <option value="chair">Chairperson</option>
+      <option value="secretary">Secretary</option>
+      <option value="treasurer">Treasurer</option>
+      <option value="admin">System Administrator</option></select></div>
+     <div class="field"><label>Username *</label><input name="user" id="userInp" placeholder="e.g., your username" autocomplete="username" required></div>
+     <div class="field"><label>Password *</label><input type="password" name="pass" placeholder="Enter your password" autocomplete="current-password" required></div>
+     <button type="submit" class="btn gld">Sign in →</button>
+     <button type="button" class="btn" data-act="showreg" style="margin-top:11px;background:#0F4735;color:#EAF1E7;border:1px solid #ffffff2e">New member? Register here →</button>
+     <p class="hint"><b style="color:var(--gold)">System Administrator:</b> username <b>admin@Kecsha.co.ke</b> · default password <b>admin123</b> — you will change it after first sign-in.<br>
+     <a href="#" data-act="adminlogin" style="color:var(--gold)">System administrator access →</a><br><br>
+     <b>All other roles:</b> register below. The <b>Administrator</b> approves &amp; activates the <b>Chairperson</b>; the <b>Chairperson</b> approves the <b>Secretary, Treasurer and all members</b> — credentials come from your registration.</p>
+    </form>
+   </div>
+  </div>
+  <div class="lfoot rv" style="animation-delay:.24s">
+   <span>© 2026 Kilifi County KECSHA Welfare Association · Draft constitution pending AGM ratification</span>
+   <span>Data stored securely in the association cloud database</span>
+  </div>
+ </div>
+</div>
+
+<!-- ================= REGISTRATION DASHBOARD ================= -->
+<div id="regPage" class="hidden">
+ <div class="band"></div>
+ <div class="regwrap2">
+  <div class="reghead rv">
+   <span class="crest-slot" data-size="48"></span>
+   <div><div class="overline">Kilifi County KECSHA Welfare Association</div>
+   <h2>Member Registration</h2>
+   <p>Admission under Article 4 · fields marked <b style="color:var(--red)">*</b> are required · photographs are cropped to <b>35 × 45 mm</b> in your browser · the Chairperson registers here too</p></div>
+   <button type="button" class="btn gho" data-act="showauth" style="margin-left:auto">← Back to sign in</button>
+  </div>
+
+  <form id="regForm" data-form="register">
+   <div class="sect rv">
+    <h3>1 · Applicant details</h3><p class="psub">Serving head teacher of a school in Kilifi County. Chairperson applications are approved by the System Administrator; all others are approved by the Chairperson.</p>
+    <div class="regcols">
+     <div class="form3">
+      <div class="field"><label>Position applying for *</label><select name="position"><option selected>Member</option><option>Chairperson</option><option>Secretary</option><option>Treasurer</option></select></div>
+      <div class="field"><label>Full name *</label><input name="name" placeholder="e.g., Mary W. Kamau" required></div>
+      <div class="field"><label>TSC number *</label><input name="tsc" placeholder="e.g., 1234567" required></div>
+      <div class="field"><label>National ID number *</label><input name="idno" placeholder="e.g., 23456789" required></div>
+      <div class="field"><label>Phone number *</label><input name="phone" placeholder="07XX XXX XXX" required></div>
+      <div class="field"><label>School *</label><input name="school" placeholder="e.g., Vipingo Primary" required></div>
+     </div>
+     <div>
+      <div class="upbox" id="regPhotoBox" style="min-height:190px"></div>
+      <button type="button" class="btn pri sm" data-act="regphoto" style="width:100%;justify-content:center;margin-top:9px">Upload &amp; crop photo *</button>
+      <small style="color:var(--mut);font-size:11px;display:block;margin-top:6px;text-align:center">Your real passport photo · 35 × 45 mm</small>
+     </div>
+    </div>
+   </div>
+
+   <div class="sect rv" style="animation-delay:.07s">
+    <h3>2 · Written beneficiary (Article 7)</h3><p class="psub">The person who receives the death benefit of KSh 150,000 upon a verified claim.</p>
+    <div class="regcols">
+     <div class="form3">
+      <div class="field"><label>Beneficiary full name *</label><input name="bn" placeholder="e.g., Agnes B. Baya" required></div>
+      <div class="field"><label>Beneficiary ID number *</label><input name="bid" placeholder="e.g., 34567890" required></div>
+      <div class="field"><label>Relationship *</label><select name="brel"><option>Spouse</option><option>Son</option><option>Daughter</option><option>Brother</option><option>Sister</option><option>Mother</option><option>Father</option><option>Other</option></select></div>
+      <div class="field"><label>Beneficiary phone number *</label><input name="bphone" placeholder="07XX XXX XXX" required></div>
+     </div>
+     <div>
+      <div class="upbox" id="regBenBox" style="min-height:190px"></div>
+      <button type="button" class="btn pri sm" data-act="regben" style="width:100%;justify-content:center;margin-top:9px">Beneficiary photo *</button>
+      <small style="color:var(--mut);font-size:11px;display:block;margin-top:6px;text-align:center">Passport format 35 × 45 mm</small>
+     </div>
+    </div>
+   </div>
+
+   <div class="sect rv" style="animation-delay:.14s">
+    <h3>3 · Identification &amp; next of kin</h3><p class="psub">A clear scan of the national ID card and the person to contact in an emergency.</p>
+    <div class="regcols">
+     <div class="form3">
+      <div class="field"><label>Next of kin — full name *</label><input name="kn" placeholder="e.g., John B. Baya" required></div>
+      <div class="field"><label>Next of kin — ID number *</label><input name="kid" placeholder="e.g., 12398765" required></div>
+      <div class="field"><label>Next of kin — phone number *</label><input name="kphone" placeholder="07XX XXX XXX" required></div>
+     </div>
+     <div>
+      <div class="upbox" id="regScanBox" style="min-height:190px"></div>
+      <button type="button" class="btn pri sm" data-act="regscan" style="width:100%;justify-content:center;margin-top:9px">Upload scanned ID card *</button>
+      <small style="color:var(--mut);font-size:11px;display:block;margin-top:6px;text-align:center">JPG or PNG · front of national ID</small>
+     </div>
+    </div>
+   </div>
+
+   <div class="sect rv" style="animation-delay:.2s">
+    <h3>4 · Login credentials</h3><p class="psub">Choose the username and password you will use to sign in after your registration is approved.</p>
+    <div class="form3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+     <div class="field"><label>Choose username *</label><input name="user" placeholder="e.g., marykamau" autocomplete="username" required></div>
+     <div class="field"><label>Create password *</label><input type="password" name="pass" placeholder="••••••••" autocomplete="new-password" required></div>
+     <div class="field"><label>Confirm password *</label><input type="password" name="pass2" placeholder="Repeat password" autocomplete="new-password" required></div>
+    </div>
+   </div>
+
+   <label class="consent"><input type="checkbox" id="consent"><span>I accept the Constitution of the Association and commit to a monthly contribution of at least <b>KSh 1,000</b>. Admission completes upon approval (Administrator for the Chairperson; Chairperson for all others) and the first receipted contribution.</span></label>
+   <div style="display:flex;gap:10px">
+    <button type="submit" class="btn pri" style="flex:1;justify-content:center;padding:13px">Submit registration</button>
+    <button type="button" class="btn gho" data-act="showauth">Cancel</button>
+   </div>
+  </form>
+ </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="hidden">
+ <aside>
+  <div class="sbrand">
+   <span class="crest-slot" data-size="44"></span>
+   <div><b>KECSHA Welfare</b><small>Kilifi County</small></div>
+  </div>
+  <nav id="nav"></nav>
+  <div class="sfoot"><div class="zz"></div><p>“Pamoja kwa wanachama — together for the members.”</p></div>
+ </aside>
+ <main>
+  <div class="band"></div>
+  <div class="topbar"><div class="topin">
+   <div class="pghead"><h2 id="pgT">Dashboard</h2><p id="pgS"></p></div>
+   <div class="clock"><b id="clkT">--:--:--</b><span id="clkD"></span></div>
+   <div class="bellwrap">
+    <button class="bellbtn" data-act="bell" aria-label="Notifications"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.6 5.2 2 6H4c.4-.8 2-2 2-6z"/><path d="M10 18.5a2.2 2.2 0 0 0 4 0"/></svg><span class="dot hidden" id="bellDot">0</span></button>
+    <div class="bellpanel hidden" id="bellPanel"></div>
+   </div>
+   <div class="uchip"><div class="av" id="uAv">–</div><div><b id="uName">—</b><small id="uRole">—</small></div></div>
+   <button class="outbtn" data-act="exit">Sign out</button>
+  </div></div>
+  <section id="view"></section>
+ </main>
+</div>
+
+<!-- ================= CROP MODAL ================= -->
+<div id="cropModal" class="cmodal hidden">
+ <div class="cbox">
+  <h3>Crop photo</h3>
+  <p class="psub" id="cropHint">Passport format — 35 × 45 mm (413 × 531 px @300 DPI)</p>
+  <div id="cropWrap" class="cropwrap"><img id="cropImg" alt="crop preview"></div>
+  <label class="zoomlab">Zoom <input type="range" id="cropZoom" min="1" max="3" step="0.01" value="1" style="width:180px"></label>
+  <div class="actions">
+   <button type="button" class="btn gho" id="cropCancel">Cancel</button>
+   <button type="button" class="btn pri" id="cropApply">Apply crop</button>
+  </div>
+ </div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+/* ================= ICONS / CREST ================= */
+const I={
+grid:'<rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>',
+users:'<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.7-3 3-4.6 5.5-4.6s4.8 1.6 5.5 4.6"/><circle cx="16.8" cy="9" r="2.4"/><path d="M16.4 14.6c2.3.3 3.8 1.7 4.4 4"/>',
+shield:'<path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z"/>',
+stamp:'<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5"/>',
+doc:'<path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4M10 12h6M10 16h6"/>',
+coins:'<circle cx="9" cy="9" r="5.5"/><path d="M9 6.5v5M7 8h3.2M15 20.5a5.5 5.5 0 1 0 0-11"/>',
+cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',
+book:'<path d="M4 5a2 2 0 0 1 2-2h13v17H6a2 2 0 0 0-2 2z"/><path d="M4 20V5M9 7h6"/>',
+cog:'<circle cx="12" cy="12" r="3.4"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4l-2.1 2.1"/>',
+bell:'<path d="M6 9a6 6 0 1 1 12 0c0 4 1.6 5.2 2 6H4c.4-.8 2-2 2-6z"/><path d="M10 18.5a2.2 2.2 0 0 0 4 0"/>',
+alert:'<path d="M12 3L2.5 20h19z"/><path d="M12 9.5v5M12 17.3v.4"/>',
+chart:'<path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3M20 16V6"/>',
+meg:'<path d="M3 11v3l4 .5L18 19V6L7 10.5z"/><path d="M7 14.5V18a2 2 0 0 0 2 2"/>',
+ledger:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 4v16M12 9h5M12 13h5"/>',
+cam:'<rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.8"/><path d="M8 7l1.5-3h5L16 7"/>'};
+const ic=n=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${I[n]}</svg>`;
+const CREST='<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="31" fill="#E7A83A"/><circle cx="32" cy="32" r="27.5" fill="#062A1F"/><circle cx="45" cy="19" r="6.5" fill="#E7A83A"/><g stroke="#E7A83A" stroke-linecap="round" fill="none"><path d="M31 50 V33" stroke-width="5"/><path d="M31 34 L21 24 M31 34 L27 20 M31 34 L35 20 M31 34 L41 24" stroke-width="3"/><path d="M14 54 q4.5 -4 9 0 t9 0 t9 0 t9 0" stroke-width="2.4" stroke="#7FD1C4"/></g></svg>';
+function crestHTML(s){return S.brand.logo
+ ?`<img src="${S.brand.logo}" style="width:${s}px;height:${s}px;border-radius:12px;object-fit:contain;background:#fff;padding:3px;box-shadow:0 4px 12px #0006" alt="Association logo">`
+ :`<span style="display:block;width:${s}px;height:${s}px;filter:drop-shadow(0 4px 12px #0006)">${CREST}</span>`}
+function refreshCrests(){$$('.crest-slot').forEach(el=>el.innerHTML=crestHTML(+el.dataset.size))}
+
+/* ================= STATE ================= */
+const S={
+ role:null,page:null,meId:null,
+ brand:{logo:null},
+ creds:{admin:{u:'admin@kecsha.co.ke',p:'admin123'},chair:{u:'—',p:'—'},secretary:{u:'—',p:'—'},treasurer:{u:'—',p:'—'}},
+ settings:{min:1000,death:150000,emer:30000,sms:true,dual:true},
+ officers:{admin:{name:'System Administrator',status:'Active'},chair:{name:'Vacant',status:'Vacant'},secretary:{name:'Vacant',status:'Vacant'},treasurer:{name:'Vacant',status:'Vacant'}},
+ members:[],contribs:[],payouts:[],cases:[],meetings:[],ann:[],notifs:[],
+ audit:[{t:new Date().toLocaleString('en-KE',{dateStyle:'medium',timeStyle:'short'}),ts:Date.now(),who:'System',act:'System initialised',det:'Fresh system — ready for registration and data entry'}],
+ ch:[]};
+const REG={photo:null,ben:null,scan:null};
+
+/* =====================================================================
+   SUPABASE-PASTE-HERE — EDIT 2: SUPABASE SYNC LAYER
+   Replace the two values below with YOUR Supabase Project URL and anon key
+   (Supabase Dashboard → Project Settings → API)
+===================================================================== */
+const SUPABASE_URL='https://YOUR-PROJECT.supabase.co';
+const SUPABASE_ANON_KEY='YOUR-ANON-PUBLIC-KEY';
+const DB=(!SUPABASE_URL.includes('YOUR-PROJECT')&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+const S_MAP={members:()=>S.members,contribs:()=>S.contribs,payouts:()=>S.payouts,cases:()=>S.cases,meetings:()=>S.meetings,anns:()=>S.ann,notifs:()=>S.notifs,audit_log:()=>S.audit};
+const LAST={};
+async function sha256(t){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return 'h-'+t}}
+function compressImage(src,maxW,q){maxW=maxW||800;q=q||0.65;return new Promise(res=>{const i=new Image();i.onload=()=>{const s=Math.min(1,maxW/i.width);const c=document.createElement('canvas');c.width=Math.round(i.width*s);c.height=Math.round(i.height*s);c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',q))};i.onerror=()=>res(src);i.src=src})}
+async function persistAll(){if(!DB)return;
+ try{
+  for(const t of Object.keys(S_MAP)){
+   const rows=S_MAP[t]();const snap=JSON.stringify(rows);if(LAST[t]===snap)continue;LAST[t]=snap;
+   const data=rows.map(r=>{if(!r._id)r._id=(crypto.randomUUID?crypto.randomUUID():'x'+Math.random().toString(36).slice(2));return{id:r._id,data:r}});
+   if(data.length)await DB.from(t).upsert(data,{onConflict:'id'});
+  }
+  await DB.from('kv').upsert([{key:'settings',value:S.settings},{key:'officers',value:S.officers},{key:'creds',value:S.creds},{key:'brand',value:S.brand}]);
+ }catch(e){console.warn('Supabase sync failed',e)}}
+let _pt=null;function queuePersist(){clearTimeout(_pt);_pt=setTimeout(persistAll,800)}
+async function loadAll(){if(!DB){refreshCrests();updateRegBoxes();return}
+ try{
+  const names=['members','contribs','payouts','cases','meetings','anns','notifs','audit_log'];
+  const ts=await Promise.all(names.map(t=>DB.from(t).select('data,created_at')));
+  const rows=ts.map(r=>(r.data||[]).sort((a,b)=>a.created_at<b.created_at?-1:1).map(x=>x.data));
+  const [mem,con,pay,cas,met,ann,not,aud]=rows;
+  if(mem.length)S.members=mem.sort((a,b)=>a.id.localeCompare(b.id));
+  if(con.length)S.contribs=con.sort((a,b)=>b.id.localeCompare(a.id));
+  if(pay.length)S.payouts=pay;
+  if(cas.length)S.cases=cas.slice().reverse();
+  if(met.length)S.meetings=met;
+  if(ann.length)S.ann=ann.slice().reverse();
+  if(not.length)S.notifs=not;
+  if(aud.length)S.audit=aud.sort((a,b)=>(b.ts||0)-(a.ts||0));
+  const kv=await DB.from('kv').select('key,value');
+  (kv.data||[]).forEach(r=>{if(r.key==='settings')Object.assign(S.settings,r.value);if(r.key==='officers')Object.assign(S.officers,r.value);if(r.key==='creds')Object.assign(S.creds,r.value);if(r.key==='brand')Object.assign(S.brand,r.value)});
+  if(S.creds.admin.p==='admin123'){S.creds.admin.p=await sha256('admin123');persistAll()}
+  Object.keys(S_MAP).forEach(t=>LAST[t]=JSON.stringify(S_MAP[t]()));
+ }catch(e){console.warn('Supabase load failed',e)}
+ const tag=(document.activeElement||{}).tagName;
+ if(S.role&&!['INPUT','TEXTAREA','SELECT'].includes(tag))render();
+ refreshCrests();updateRegBoxes();}
+/* ================= END SYNC LAYER ================= */
+
+const PAY={ev:null};
+const ME=()=>S.members.find(m=>m.id===S.meId)||null;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const money=n=>'KSh '+Number(n).toLocaleString('en-KE');
+const PC={'Active':'g','Paid':'g','Verified':'g','Matched':'g','Available':'g','Approved for Payment':'b','Pending Approval':'y','Pending Verification':'y','Awaiting Documents':'y','Pending Review':'y','Draft':'gr','On Leave':'y','Vacant':'gr','Not Registered':'gr','Not Recorded':'gr','Closed':'gr','Deceased':'gr','Overdue':'r','Rejected':'r','Declined':'r','Unmatched':'y'};
+const pill=s=>`<span class="pill p-${PC[s]||'gr'}">${s}</span>`;
+const initials=n=>n.split(' ').filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join('')||'—';
+const photoBox=(m,cls='')=>m.photo?`<img class="photo ${cls}" src="${m.photo}" alt="${m.name}">`:`<div class="photo ph ${cls}">${initials(m.name)}</div>`;
+const tile=(icon,label,val,sub,tone,pre)=>`<div class="tile rv" style="--tc:${tone}"><div class="tl">${ic(icon)} ${label}</div><div class="tv" data-cu="${val}" data-pre="${pre||''}">0</div><div class="ts">${sub}</div></div>`;
+const tbl=(cols,rows)=>`<div class="twrap"><table class="tbl"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${cols.length}" style="color:var(--mut);text-align:center;padding:18px">No records yet</td></tr>`}</tbody></table></div>`;
+const memName=id=>{const m=S.members.find(x=>x.id===id);return m?m.name:id};
+const ROLEACT={admin:'System Administrator',chair:'Chairperson',secretary:'Secretary',treasurer:'Treasurer',member:'Member'};
+const OFFROLE={chair:'Chairperson',secretary:'Secretary',treasurer:'Treasurer'};
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const curMonth=()=>MONTHS[new Date().getMonth()]+' '+new Date().getFullYear();
+const today=()=>new Date().toLocaleDateString('en-KE',{day:'2-digit',month:'short',year:'numeric'});
+const sumContribs=()=>S.contribs.filter(c=>c.status==='Verified').reduce((a,c)=>a+c.amt,0);
+const sumPayouts=()=>S.payouts.reduce((a,p)=>a+p.amt,0);
+const pendContribs=()=>S.contribs.filter(c=>c.status==='Pending Verification');
+const evLink=c=>c.evidence?`<a href="${c.evidence}" target="_blank" style="color:var(--green);font-weight:700">View evidence</a>`:'—';
+function SELF(){if(S.role==='member')return ME();const key=OFFROLE[S.role];return key?S.members.find(x=>x.role===key):null}
+function monthTotals(){const t=MONTHS.map(()=>0);S.contribs.filter(c=>c.status==='Verified').forEach(c=>{const mi=MONTHS.indexOf((c.month||'').split(' ')[0]);if(mi>-1)t[mi]+=c.amt});return MONTHS.map((m,i)=>[m,t[i]])}
+/* EDIT 3a: audit now carries a numeric timestamp for cloud ordering */
+function audit(who,act,det){S.audit.unshift({t:new Date().toLocaleString('en-KE',{dateStyle:'medium',timeStyle:'short'}),ts:Date.now(),who,act,det})}
+function toast(msg,kind){const t=document.createElement('div');t.className='toast'+(kind==='err'?' err':'');t.innerHTML=msg;$('#toasts').appendChild(t);setTimeout(()=>t.classList.add('out'),3800);setTimeout(()=>t.remove(),4350)}
+function countUp(root){root.querySelectorAll('[data-cu]').forEach(el=>{const t=+el.dataset.cu,pre=el.dataset.pre||'',d=900,st=performance.now();(function f(n){const p=Math.min(1,(n-st)/d),e=1-Math.pow(1-p,3);el.textContent=pre+Math.round(t*e).toLocaleString('en-KE');if(p<1)requestAnimationFrame(f)})(st)})}
+function bars(){const d=monthTotals();if(!d.some(x=>x[1]>0))return `<p style="color:var(--mut);font-size:13.5px;padding:20px 0;text-align:center">No verified contributions recorded yet.</p>`;
+ const mx=Math.max(...d.map(c=>c[1]),1);return `<div class="chart">${d.map(c=>`<div class="bar" title="${money(c[1])}"><i style="height:${Math.max(c[1]/mx*100,c[1]?6:2).toFixed(0)}%"></i><em>${c[0]}</em><u>${c[1]?(c[1]/1000).toFixed(1)+'k':'·'}</u></div>`).join('')}</div>`}
+function memTable(full,photoBtn){const rows=S.members.filter(m=>m.status!=='Declined').map(m=>`<tr>
+ <td>${photoBox(m)}</td><td class="mono">${m.id}</td>
+ <td><b>${m.name}</b>${m.role!=='—'?` <span class="pill p-b">${m.role}</span>`:''}</td>
+ <td>${m.school}</td><td class="mono">${m.tsc}</td><td class="mono">${m.idno}</td><td class="mono">${m.phone}</td>
+ <td>${pill(m.status)}</td><td class="mono">${m.months}</td><td class="mono">${money(m.total)}</td>
+ ${full?`<td>${m.ben.n==='None on file'?'<span style="color:var(--red)">None on file</span>':m.ben.n+` <small style="color:var(--mut)">(${m.ben.r})</small>`} ${pill(m.ben.s)}</td>`:''}
+ ${photoBtn?`<td><button type="button" class="btn sm gho" data-act="setphoto" data-id="${m.id}">${ic('cam')} ${m.photo?'Replace':'Upload'}</button></td>`:''}</tr>`).join('');
+ return tbl(['Photo','No.','Member','School','TSC No.','ID No.','Phone','Status','Months','Total Paid'].concat(full?['Written Beneficiary']:[]).concat(photoBtn?['35 × 45 mm photo']:[]),rows)}
+function caseCards(actions){return S.cases.map(c=>{const dk=Object.keys(c.docs);const done=dk.filter(k=>c.docs[k]).length;
+ let btns='';
+ if(actions==='chair'&&c.status==='Pending Approval')btns=`<button type="button" class="btn pri sm" data-act="approve" data-id="${c.id}">${ic('stamp')} Approve benefit</button><button type="button" class="btn dng sm" data-act="reject" data-id="${c.id}">Reject</button>`;
+ if(actions==='treas'&&c.status==='Approved for Payment')btns=`<button type="button" class="btn gld sm" data-act="pay" data-id="${c.id}">${ic('coins')} Record disbursement</button>`;
+ return `<div class="caserow rv"><div class="ch"><b>${c.id}</b><span class="pill p-b">${c.type}</span>${pill(c.status)}<span class="amt">${money(c.amt)}</span></div>
+ <div style="font-size:13px;color:var(--mut)">Member: <b style="color:var(--ink)">${c.member}</b> · Beneficiary: ${c.ben} · Opened ${c.opened} · Documents ${done}/${dk.length}</div>
+ <div>${dk.map(k=>`<span class="docchip ${c.docs[k]?'ok':''}">${c.docs[k]?'✓':'○'} ${k}</span>`).join('')}</div>
+ <p style="font-size:12.8px;margin-top:8px">${c.note}</p><div class="actions">${btns}</div></div>`}).join('')}
+function regCard(m,approver){const buttons=approver==='me'
+ ?`<button type="button" class="btn pri sm" data-act="${m.position==='Chairperson'?'approvechair':'approvemem'}" data-id="${m.id}">${ic('stamp')} Approve &amp; activate</button><button type="button" class="btn dng sm" data-act="declinemem" data-id="${m.id}">Decline</button>`
+ :`<small style="color:var(--mut)">awaiting ${m.position==='Chairperson'?'the Administrator':'the Chairperson'}</small>`;
+ return `<div class="offc" style="align-items:flex-start">
+  <div class="oav">${m.photo?`<img src="${m.photo}">`:initials(m.name)}</div>
+  <div style="flex:1;min-width:240px">
+   <b>${m.name}</b> <span class="pill p-b">${m.position}</span> ${pill(m.status)}
+   <small>${m.school} · ${m.id}</small>
+   <small>TSC <b class="mono">${m.tsc}</b> · National ID <b class="mono">${m.idno}</b> · ${m.phone}</small>
+   <small>Login username: <b class="mono">${m.user}</b></small>
+   <small>Beneficiary: <b>${m.ben.n}</b> · ID ${m.ben.id} · ${m.ben.r} · ${m.ben.p} · photo ${m.ben.photo?'✓':'✗'}</small>
+   <small>Next of kin: ${m.nok.n} · ID ${m.nok.id} · ${m.nok.p}</small>
+   <small>Scanned ID card: ${m.scan?`<a href="${m.scan}" target="_blank" style="color:var(--green);font-weight:700">view scan ✓</a>`:'<span style="color:var(--red)">missing ✗</span>'}</small>
+  </div>
+  <div style="display:flex;gap:8px">${buttons}</div></div>`}
+function contribQueue(title){const pq=pendContribs();const selfTreas=(S.role==='treasurer'&&SELF())?SELF().id:null;
+ return `<div class="panel rv"><h3>${ic('coins')} ${title}</h3><p class="psub">Members submit the amount paid with an <b>M-PESA screenshot or scanned bank receipt</b>. Verify to reflect it on the member's dashboard and all financial records, or reject with a reason.</p>
+ ${pq.length?pq.map(c=>{const own=selfTreas&&c.m===selfTreas;return `<div class="caserow"><div class="ch"><b>${memName(c.m)}</b><span class="pill p-b">${c.month}</span>${pill(c.status)}<span class="amt">${money(c.amt)}</span></div>
+ <div style="font-size:13px;color:var(--mut)">Method: <b>${c.method}</b> · Reference: <b class="mono">${c.ref}</b> · Submitted ${c.date} · ${evLink(c)}</div>
+ ${c.note?`<p style="font-size:12.5px;color:var(--red);margin-top:4px">${c.note}</p>`:''}
+ <div class="actions">${own?`<span style="color:var(--red);font-weight:700;font-size:12.5px">${ic('lock')} Your own payment (Article 16) — Chairperson's countersignature required</span>`:`<button type="button" class="btn pri sm" data-act="vpay" data-id="${c.id}">${ic('stamp')} Verify &amp; approve</button><button type="button" class="btn dng sm" data-act="rpay" data-id="${c.id}">Reject</button>`}</div></div>`}).join(''):'<p style="color:var(--mut);font-size:13.5px">No contribution evidence awaiting verification.</p>'}</div>`}
+function payFormHTML(){return `<form class="form" data-form="payCon">
+ <div class="field"><label>Month *</label><select name="month">${[curMonth(),...MONTHS.map(m=>m+' '+new Date().getFullYear()).filter(x=>x!==curMonth())].map(m=>`<option ${m===curMonth()?'selected':''}>${m}</option>`).join('')}</select></div>
+ <div class="field"><label>Amount paid (KSh) *</label><input type="number" name="amt" min="${S.settings.min}" value="${S.settings.min}" required></div>
+ <div class="field"><label>Payment method *</label><select name="method"><option>M-PESA</option><option>Bank deposit / transfer</option></select></div>
+ <div class="field"><label>Payment reference *</label><input name="ref" required placeholder="e.g., MPESA code or slip no."></div>
+ <div class="field" style="grid-column:1/-1"><label>Payment evidence *</label>
+  <div class="upbox" id="payEvBox"></div>
+  <div class="actions" style="margin-top:8px"><button type="button" class="btn pri sm" data-act="payev">${ic('cam')} Upload M-PESA screenshot / bank receipt</button><button type="button" class="btn gho sm" data-act="payevclear">Remove</button></div></div>
+ <button type="submit" class="btn pri">${ic('coins')} Submit for verification</button></form>`}
+function emerFormHTML(){return `<form class="form" data-form="emergency">
+ <div class="field"><label>Category</label><select name="cat"><option>Hospitalisation</option><option>Fire / Disaster</option><option>Bereavement — immediate family</option></select></div>
+ <div class="field"><label>Amount requested (KSh)</label><input type="number" name="amt" max="${S.settings.emer}" value="${S.settings.emer}" required></div>
+ <div class="field" style="grid-column:1/-1"><label>Describe the emergency</label><textarea name="desc" rows="3" required></textarea></div>
+ <button type="submit" class="btn pri">${ic('alert')} Submit request</button></form>`}
+function selfPanel(){const self=SELF();if(!self)return '';
+ const my=S.contribs.filter(c=>c.m===self.id&&c.status==='Verified');
+ const pend=S.contribs.filter(c=>c.m===self.id&&c.status==='Pending Verification');
+ return `<div class="panel rv" style="border-top:4px solid var(--gold)"><h3>${ic('users')} My member services — ${self.name} (${self.id})</h3><p class="psub">Office-bearers are also members of the welfare (Article 6). Verified so far: <b class="mono">${money(my.reduce((a,c)=>a+c.amt,0))}</b> across <b>${new Set(my.map(c=>c.month)).size}</b> month(s)${pend.length?' · <b>'+pend.length+'</b> awaiting verification':''}. ${S.role==='treasurer'?'Your own payments are countersigned by the Chairperson (Article 16). All other payments are verified by you.':'Your payments are verified by the Treasurer;'} emergency requests follow the normal approval chain.</p>
+ <div class="grid2" style="margin-bottom:0">
+ <div><h4 style="font-size:14.5px;margin-bottom:10px">${ic('coins')} Pay my contribution</h4>${payFormHTML()}</div>
+ <div><h4 style="font-size:14.5px;margin-bottom:10px">${ic('alert')} Request emergency assistance</h4><p class="psub">Cap: ${money(S.settings.emer)} (Article 10).</p>${emerFormHTML()}</div>
+ </div></div>`}
+
+/* ================= CROP ENGINE ================= */
+const CR={base:1,zoom:1,dx:0,dy:0,aspect:45/35,vw:280,vh:360,cb:null};
+function pickFile(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(f)};i.click()}
+function openCrop(src,aspect,cb){
+ CR.aspect=aspect;CR.cb=cb;CR.zoom=1;CR.dx=0;CR.dy=0;$('#cropZoom').value=1;
+ CR.vh=Math.round(CR.vw*aspect);$('#cropWrap').style.height=CR.vh+'px';
+ $('#cropHint').textContent=aspect>1.2?'Passport format — 35 × 45 mm (413 × 531 px @300 DPI) · drag to position':'Square crop for the association logo';
+ $('#cropModal').classList.remove('hidden');
+ const img=$('#cropImg');
+ img.onload=()=>{CR.base=Math.max(CR.vw/img.naturalWidth,CR.vh/img.naturalHeight);pos()};
+ img.src=src}
+function pos(){const img=$('#cropImg');img.style.width=(img.naturalWidth*CR.base*CR.zoom)+'px';img.style.transform=`translate(-50%,-50%) translate(${CR.dx}px,${CR.dy}px)`}
+function applyCrop(){const img=$('#cropImg');const ds=CR.base*CR.zoom;
+ const srcW=CR.vw/ds,srcH=CR.vh/ds;
+ let sx=(img.naturalWidth-srcW)/2-CR.dx/ds, sy=(img.naturalHeight-srcH)/2-CR.dy/ds;
+ sx=Math.max(0,Math.min(sx,img.naturalWidth-srcW));sy=Math.max(0,Math.min(sy,img.naturalHeight-srcH));
+ const W=CR.aspect>1.2?413:512,H=Math.round(W*CR.aspect);
+ const c=document.createElement('canvas');c.width=W;c.height=H;
+ c.getContext('2d').drawImage(img,sx,sy,srcW,srcH,0,0,W,H);
+ CR.cb(c.toDataURL('image/jpeg',0.92));$('#cropModal').classList.add('hidden')}
+
+/* ================= CONSTITUTION ================= */
+const CON=`<div class="constit rv"><nav><b>Contents</b>
+<a href="#p1">I · Preliminary</a><a href="#p2">II · Objectives</a><a href="#p3">III · Membership</a><a href="#p4">IV · Beneficiary Nomination</a><a href="#p5">V · Contributions</a><a href="#p6">VI · Death Benefit</a><a href="#p7">VII · Emergency Assistance</a><a href="#p8">VIII · Governance &amp; Officers</a><a href="#p9">IX · Meetings</a><a href="#p10">X · Financial Management</a><a href="#p11">XI · Approval &amp; Authority Flow</a><a href="#p12">XII · Conduct &amp; Privacy</a><a href="#p13">XIII · Amendments</a><a href="#p14">XIV · Dissolution</a><a href="#sch">Schedule 1</a></nav>
+<div class="doc"><div class="chead"><h3>CONSTITUTION OF THE KILIFI COUNTY KECSHA WELFARE ASSOCIATION</h3><p>DRAFT — for adoption by the Annual General Meeting · Welfare fund of head teachers of Kilifi County</p></div>
+<div class="part" id="p1"><h4>Part I — Preliminary</h4>
+<div class="art"><h5>Article 1 — Name</h5><ol><li>The Association shall be known as the <b>Kilifi County KECSHA Welfare Association</b> (hereinafter “the Association”).</li><li>The registered office of the Association shall be within Kilifi County, Kenya.</li></ol></div>
+<div class="art"><h5>Article 2 — Interpretation</h5><ol><li>“Member” means a serving head teacher admitted under Article 4.</li><li>“Beneficiary” means the person nominated in writing by a member under Article 7.</li><li>“The Fund” means all contributions, donations and income of the Association.</li></ol></div></div>
+<div class="part" id="p2"><h4>Part II — Objectives</h4>
+<div class="art"><h5>Article 3 — Objectives</h5><ol><li>To support members and their written beneficiaries upon the death of a member.</li><li>To pool monthly contributions for the common welfare of members.</li><li>To provide emergency assistance to members in documented need.</li><li>To promote unity, dignity and mutual responsibility among head teachers of Kilifi County.</li><li>To manage all funds transparently, accountably and strictly for welfare purposes.</li></ol></div></div>
+<div class="part" id="p3"><h4>Part III — Membership</h4>
+<div class="art"><h5>Article 4 — Eligibility &amp; Admission</h5><ol><li>Membership is open to every serving head teacher of a school within Kilifi County.</li><li>Application shall be made through the registration portal, accompanied by: a passport photograph measuring <b>35 × 45 mm</b>, the <b>TSC number</b>, the <b>national ID number</b>, a <b>scanned copy of the national ID</b>, the school and position applied for, next-of-kin particulars, and the applicant's chosen <b>username and password</b>.</li><li>The <b>System Administrator approves and activates the Chairperson</b>; the <b>Chairperson approves the Secretary, the Treasurer and all other members</b>. Admission is completed upon approval and the first receipted contribution.</li></ol></div>
+<div class="art"><h5>Article 5 — Cessation</h5><ol><li>Membership ceases on: (a) written resignation; (b) death; (c) ceasing to serve as a head teacher in Kilifi County; (d) removal for gross misconduct; or (e) arrears exceeding six months after written notice.</li><li>Upon death, entitlement passes to the written beneficiary under Article 9.</li><li>Contributions are not refundable, except as the members may resolve in a special case.</li></ol></div>
+<div class="art"><h5>Article 6 — Rights &amp; Obligations</h5><ol><li>Every member — including the Chairperson, Secretary and Treasurer — may attend, speak and vote at general meetings, pay contributions and claim benefits.</li><li>Every member shall pay the monthly contribution with payment evidence, keep records, photograph, beneficiary and next-of-kin details accurate, and report discrepancies promptly.</li><li>Members shall protect their login credentials; use of another person's credentials is misconduct.</li></ol></div></div>
+<div class="part" id="p4"><h4>Part IV — Beneficiary Nomination</h4>
+<div class="art"><h5>Article 7 — Written Beneficiary</h5><ol><li>Every member shall nominate in writing the beneficiary who shall receive the death benefit, providing the beneficiary's <b>name, national ID number, relationship</b> (spouse, son, daughter, brother, sister, mother, father or other)<b>, phone number and a 35 × 45 mm photograph</b>.</li><li>A member may change the beneficiary at any time through the Secretary; the change takes effect when verified and recorded.</li><li>Where no valid nomination exists, the benefit shall be paid in this order: surviving spouse; the member's children equally; the member's estate.</li></ol></div></div>
+<div class="part" id="p5"><h4>Part V — Contributions</h4>
+<div class="art"><h5>Article 8 — Monthly Contribution</h5><ol><li>The minimum contribution shall be <b>KSh 1,000 per month</b> per member. A member may contribute more.</li><li>Contributions are due by the 5th day of the month following the month of contribution.</li><li>Each member payment shall be submitted with <b>payment evidence — an M-PESA screenshot or a scanned bank receipt</b> — and is counted once verified: by the Treasurer for ordinary members, and by the Chairperson's countersignature for the Treasurer's own payments.</li><li>An increase of the minimum contribution requires a resolution of a general meeting.</li></ol></div></div>
+<div class="part" id="p6"><h4>Part VI — Death Benefit</h4>
+<div class="art"><h5>Article 9 — Benefit on Death</h5><ol><li>On the death of a member in good standing, the written beneficiary shall receive the amount <b>approved and agreed upon by the members</b> (currently KSh 150,000 per Schedule 1), subject to the Fund's ability to pay as resolved by the members.</li><li>A claim shall be lodged with the Secretary within ninety (90) days and supported by: the death certificate, burial permit, beneficiary's national ID, and a letter from the area administrator.</li><li>Once documents are complete and approval granted under Article 18, payment shall be made to the beneficiary within twenty-one (21) days.</li></ol></div></div>
+<div class="part" id="p7"><h4>Part VII — Emergency Assistance</h4>
+<div class="art"><h5>Article 10 — Emergencies</h5><ol><li>Recognised emergencies include hospitalisation of a member, fire or disaster affecting a member, and bereavement of a member's immediate family.</li><li>Assistance shall not exceed the cap in Schedule 1 (currently KSh 30,000) unless a general meeting resolves otherwise.</li><li>The member, the next of kin, or a representative shall notify the Secretary and submit supporting documents within fourteen (14) days.</li><li>Emergency assistance is a benefit, not a loan, unless the members expressly resolve otherwise.</li></ol></div></div>
+<div class="part" id="p8"><h4>Part VIII — Governance &amp; Officers</h4>
+<div class="art"><h5>Article 11 — Organs</h5><ol><li>The organs of the Association are the General Meeting of members and the office-bearers.</li></ol></div>
+<div class="art"><h5>Article 12 — Office-Bearers &amp; System Roles</h5><ol><li><b>System Administrator</b> — custodian of system access and branding; <b>approves and activates the Chairperson</b> after the Chairperson registers like any other member; issues and resets credentials; changes the administrator password after first login.</li><li><b>Chairperson</b> — registers through the member registration portal, is approved and activated by the Administrator, and thereafter <b>approves the Secretary, the Treasurer and all members</b>; presides at meetings; approves welfare payments under Article 18; countersigns the Treasurer's own contributions.</li><li><b>Secretary</b> — documents registrations and records (TSC number, ID, photographs, scanned ID), keeps member records, beneficiary nominations, case documentation, meetings, minutes and communications.</li><li><b>Treasurer</b> — verifies member contribution evidence, records contributions, verifies payments, keeps receipts and statements, processes authorised welfare payments, and prepares financial reports.</li><li>No person shall hold more than one of the offices of Chairperson, Secretary or Treasurer.</li></ol></div>
+<div class="art"><h5>Article 13 — Vacation &amp; Removal of Office</h5><ol><li>An office-bearer vacates office on resignation, death, incapacity, or removal by a two-thirds majority of members present at a general meeting for misconduct or breach of this Constitution.</li><li>On vacation, all records, credentials and funds in the officer's custody shall be handed over within fourteen (14) days, and their system credentials revoked or reissued.</li></ol></div></div>
+<div class="part" id="p9"><h4>Part IX — Meetings</h4>
+<div class="art"><h5>Article 14 — General Meetings</h5><ol><li>The AGM shall be held by November each year: to receive reports and audited accounts, set benefits and contributions, and elect office-bearers when due.</li><li>Quarterly general meetings shall be held to review welfare cases and contributions.</li><li>Quorum shall be one-third of active members.</li><li>The Secretary shall record minutes and resolutions; minutes adopted at a meeting form the Association's official record.</li></ol></div></div>
+<div class="part" id="p10"><h4>Part X — Financial Management</h4>
+<div class="art"><h5>Article 15 — Funds &amp; Accounts</h5><ol><li>The Fund shall be held in a bank account and/or designated mobile-money paybill in the Association's name.</li><li>Mandate signatories shall be the Chairperson and the Treasurer, with the Secretary as an alternative signatory as resolved.</li></ol></div>
+<div class="art"><h5>Article 16 — Separation of Duties &amp; Integrity of Records</h5><ol><li>The duties of recording, approving and paying shall be separated among officers as set out in this Constitution.</li><li><b>No officer shall secretly alter, delete or reverse historical financial records.</b> Any correction shall be made as a visible adjusting entry by the Treasurer, stating reason, and shall appear in the audit trail.</li><li>The Chairperson may review financial records but may not modify them. The Secretary may view payment status but may not alter financial records.</li><li>The Treasurer shall not verify or approve their own payments; the Treasurer's own contributions and benefits require the Chairperson's countersignature, recorded in the audit trail.</li></ol></div>
+<div class="art"><h5>Article 17 — Audit</h5><ol><li>The accounts shall be examined annually by an auditor or inspection committee appointed at the AGM.</li><li>Members may inspect the financial statement at the AGM and may raise discrepancies in writing.</li></ol></div></div>
+<div class="part" id="p11"><h4>Part XI — Approval &amp; Authority Flow</h4>
+<div class="art"><h5>Article 18 — Welfare Payment Chain</h5><ol><li>Every welfare payment shall follow the chain: <b>notification → documentation by the Secretary → verification of eligibility and funds by the Treasurer → approval by the Chairperson → payment and confirmation by the Treasurer.</b></li><li>In life-threatening emergencies the Chairperson, with any two office-bearers, may authorise fast-track assistance, which must be ratified at the next meeting.</li><li>Every step shall be time-stamped in the system's audit trail.</li></ol></div></div>
+<div class="part" id="p12"><h4>Part XII — Conduct &amp; Privacy</h4>
+<div class="art"><h5>Article 19</h5><ol><li>Officers and members shall act in good faith and protect the dignity of beneficiaries and affected members.</li><li>Case files, photographs, ID scans, payment evidence, credentials, medical information and beneficiary details are confidential and shall be processed only for welfare purposes, in accordance with Kenya's data protection law.</li></ol></div></div>
+<div class="part" id="p13"><h4>Part XIII — Amendments</h4>
+<div class="art"><h5>Article 20</h5><ol><li>This Constitution may be amended by a two-thirds majority of members present at an AGM or a special meeting convened for that purpose.</li></ol></div></div>
+<div class="part" id="p14"><h4>Part XIV — Dissolution</h4>
+<div class="art"><h5>Article 21</h5><ol><li>Dissolution requires a two-thirds majority of all active members.</li><li>After settling all pending benefits, any surplus shall be donated to a charitable cause serving schools in Kilifi County, as resolved at the dissolution meeting.</li></ol></div></div>
+<div class="part" id="sch"><h4>Schedule 1 — Contributions, Benefits &amp; Documents</h4>
+${tbl(['Item','Amount / Rule','Authority'],`
+<tr><td>Minimum monthly contribution</td><td class="mono">KSh 1,000</td><td>Article 8</td></tr>
+<tr><td>Contribution evidence</td><td>M-PESA screenshot or scanned bank receipt, verified by Treasurer (Chairperson countersigns the Treasurer's own)</td><td>Article 8(3)</td></tr>
+<tr><td>Death benefit (to written beneficiary)</td><td class="mono">KSh 150,000</td><td>AGM resolution</td></tr>
+<tr><td>Emergency assistance cap</td><td class="mono">KSh 30,000</td><td>Article 10</td></tr>
+<tr><td>Member &amp; beneficiary photograph</td><td>35 × 45 mm, plain background</td><td>Articles 4(2) &amp; 7(1)</td></tr>
+<tr><td>Registration documents</td><td>TSC · ID · scanned ID · next of kin · username &amp; password</td><td>Article 4(2)</td></tr>
+<tr><td>Contribution due date</td><td>5th of the following month</td><td>Article 8(2)</td></tr>
+<tr><td>Payment window after approval</td><td>21 days</td><td>Article 9(3)</td></tr>`)}
+</div></div></div>`;
+
+/* ================= NAV ================= */
+const NAVS={
+ admin:{sub:'System access & configuration',items:[['dash','Overview','grid'],['users','Officers & Access','shield'],['settings','System Settings & Branding','cog'],['audit','Audit Log','ledger']]},
+ chair:{sub:'Leadership · approvals · oversight',items:[['dash','Dashboard','grid'],['members','Manage Members','users'],['officers','Secretary & Treasurer','stamp'],['cases','Welfare Cases','alert'],['approvals','Review & Approvals','stamp'],['finance','Financial Oversight','chart'],['meetings','Meetings & Resolutions','cal'],['reports','Reports','doc'],['rules','Welfare Rules & Settings','book']]},
+ secretary:{sub:'Administration · records · communication',items:[['dash','Dashboard','grid'],['register','Member Registration & Records','users'],['cases','Death & Emergency Cases','alert'],['docs','Case Documentation','doc'],['meetings','Meetings & Minutes','cal'],['comms','Announcements','meg'],['reports','Administrative Reports','chart']]},
+ treasurer:{sub:'Finance · verification · accountability',items:[['dash','Dashboard','grid'],['contribs','Monthly Contributions','coins'],['payments','Payment Records','ledger'],['welfare','Welfare Payment Processing','stamp'],['statements','Financial Statements','chart'],['recon','Payment Reconciliation','ledger'],['audit','Audit Trail','shield']]},
+ member:{sub:'Your membership & welfare information',items:[['dash','My Dashboard','grid'],['profile','My Profile','users'],['contribs','My Contributions','coins'],['assist','Welfare Assistance','alert'],['beneficiary','Beneficiary Information','doc'],['notifs','Notifications','bell'],['constitution','Constitution & Welfare Rules','book']]}};
+function persona(r){if(r==='member'){const m=ME();return m?[m.name,'Member · '+m.school]:['—','Member']}return [S.officers[r].name,{admin:'System Administrator',chair:'Chairperson',secretary:'Secretary',treasurer:'Treasurer'}[r]]}
+const pendNonChair=()=>S.members.filter(m=>m.status==='Pending Verification'&&m.position!=='Chairperson');
+const pendChair=()=>S.members.filter(m=>m.status==='Pending Verification'&&m.position==='Chairperson');
+
+/* ================= VIEWS ================= */
+const V={
+admin:{
+ dash(){const pc=pendChair();return `
+ <div class="tiles">${tile('shield','Officers Active',['chair','secretary','treasurer'].filter(k=>S.officers[k].status==='Active').length,'of 3 association offices','var(--green)')}${tile('users','Active Members',S.members.filter(m=>m.status==='Active').length,S.members.filter(m=>m.status==='Pending Verification').length+' registration(s) pending approval','var(--blue)')}${tile('alert','Open Welfare Cases',S.cases.filter(c=>c.status!=='Paid'&&c.status!=='Rejected').length,'in the approval pipeline','var(--red)')}${tile('ledger','Audit Events',S.audit.length,'traceable system actions','var(--goldD)')}</div>
+ <div class="panel rv"><h3>${ic('stamp')} Chairperson approval — Administrator's duty</h3><p class="psub">The Chairperson registers through the same member registration form (with their real 35 × 45 mm photo). You approve and activate them; their login credentials come from their registration. All other members, the Secretary and the Treasurer are approved by the Chairperson.</p>
+ ${pc.length?pc.map(m=>regCard(m,'me')).join(''):'<p style="color:var(--mut);font-size:13.5px">No Chairperson registration pending. '+ (S.officers.chair.status==='Active'?'Current chairperson: <b>'+S.officers.chair.name+'</b>':'The office is currently <b>Vacant</b>.')+'</p>'}</div>
+ <div class="panel rv"><h3>${ic('shield')} Access hierarchy & authority flow</h3><p class="psub">Financial approval, payment authorisation and audit access are deliberately separated.</p>
+ <div class="flow"><div class="fstep"><b>System Administrator</b><span>Approves &amp; activates the Chairperson · branding · settings</span></div><div class="fstep"><b>Chairperson</b><span>Approves Secretary, Treasurer &amp; members · approves assistance</span></div><div class="fstep"><b>Secretary</b><span>Documents registrations &amp; records · cases &amp; meetings</span></div><div class="fstep"><b>Treasurer</b><span>Verifies contribution evidence &amp; executes authorised payments</span></div><div class="fstep"><b>Members</b><span>Contribute with evidence, claim &amp; view own records</span></div></div></div>
+ <div class="grid2"><div class="panel rv"><h3>${ic('cam')} Branding status</h3><div style="display:flex;gap:14px;align-items:center">${crestHTML(58)}<div style="font-size:13.5px"><b>Association logo</b><div style="color:var(--mut)">${S.brand.logo?'Custom logo in use system-wide':'Default crest — upload in System Settings'}</div><div class="actions"><button type="button" class="btn gho sm" data-act="nav" data-id="settings">${ic('cog')} Open settings</button></div></div></div></div>
+ <div class="panel rv"><h3>${ic('users')} Registration activity</h3>
+ ${S.members.filter(m=>m.status==='Pending Verification').map(m=>`<div class="offc"><div class="oav">${m.photo?`<img src="${m.photo}">`:initials(m.name)}</div><div style="flex:1"><b>${m.name}</b><small>${m.school} · applied as ${m.position} · ${m.position==='Chairperson'?'your approval':'Chairperson\u2019s approval'} required</small></div>${pill(m.status)}</div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">No registrations awaiting approval.</p>'}</div></div>
+ <div class="panel rv"><h3>${ic('ledger')} Recent system activity</h3>${tbl(['Time','Actor','Action','Detail'],S.audit.slice(0,6).map(a=>`<tr><td class="mono" style="white-space:nowrap">${a.t}</td><td><b>${a.who}</b></td><td>${a.act}</td><td style="color:var(--mut)">${a.det}</td></tr>`).join(''))}</div>`},
+ users(){const pc=pendChair();return `
+ <div class="panel rv"><h3>${ic('stamp')} Approve &amp; activate the Chairperson</h3><p class="psub">The Chairperson registers like any other member. On approval, their registration username &amp; password become their login.</p>
+ ${pc.length?pc.map(m=>regCard(m,'me')).join(''):'<p style="color:var(--mut);font-size:13.5px">No Chairperson registration pending. '+ (S.officers.chair.status==='Active'?'Current chairperson: <b>'+S.officers.chair.name+'</b>':'The office is currently <b>Vacant</b>.')+'</p>'}</div>
+ <div class="panel rv"><h3>${ic('users')} Officer register &amp; login credentials</h3>
+ ${['chair','secretary','treasurer','admin'].map(k=>{const o=S.officers[k];const mm=S.members.find(x=>x.role===OFFROLE[k]);return `<div class="offc"><div class="oav">${mm&&mm.photo?`<img src="${mm.photo}">`:initials(o.name)}</div><div style="flex:1"><b>${o.name}</b>${mm?`<small>TSC ${mm.tsc} · ID ${mm.idno} · ${mm.school}</small>`:''}<small>${k==='admin'?'System access, branding & settings':k==='chair'?'Association leadership — approved by Administrator':k==='secretary'?'Records, cases & meetings — approved by Chairperson':'Contributions & payments — approved by Chairperson'}</small>
+ <div class="credrow">${ic('shield')} Login — username: <b class="mono">${S.creds[k].u}</b> · password: ${S.creds[k].u==='—'?'—':'<b class="mono">••••••</b>'}${k==='admin'?' · change it in System Settings':S.creds[k].u==='—'?' · not issued yet':''}</div></div>${pill(o.status)}</div>`}).join('')}</div>
+ <div class="panel rv"><h3>${ic('lock')} Permission matrix (read-only summary)</h3>${tbl(['Capability','Admin','Chair','Secretary','Treasurer','Member'],`
+ <tr><td>Approve &amp; activate Chairperson</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+ <tr><td>Approve members, Secretary &amp; Treasurer</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
+ <tr><td>Verify contribution evidence</td><td>—</td><td>countersign</td><td>—</td><td>✓</td><td>—</td></tr>
+ <tr><td>Edit member records & photos</td><td>—</td><td>view</td><td>✓</td><td>—</td><td>own</td></tr>
+ <tr><td>Approve welfare payments</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
+ <tr><td>Pay contributions &amp; request emergency help</td><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+ <tr><td>Alter confirmed financial records</td><td colspan="5" style="color:var(--red)"><b>No single role</b> — corrections only via documented adjusting entry + audit trail (Article 16)</td></tr>
+ <tr><td>View audit trail</td><td>✓</td><td>✓</td><td>—</td><td>finance events</td><td>—</td></tr>`)}</div>`},
+ settings(){const s=S.settings;return `
+ <div class="panel rv"><h3>${ic('shield')} Change administrator password</h3><p class="psub">Signed in as <b class="mono">${S.creds.admin.u}</b>. The default password <b class="mono">admin123</b> must be changed after first login.</p>
+ <form class="form" data-form="changeAdminPass">
+ <div class="field"><label>Current password</label><input type="password" name="cur" required></div>
+ <div class="field"><label>New password</label><input type="password" name="new" required></div>
+ <div class="field"><label>Confirm new password</label><input type="password" name="confirm" required></div>
+ <button type="submit" class="btn pri">${ic('stamp')} Change password</button></form></div>
+ <div class="panel rv"><h3>${ic('cam')} Association branding — logo upload</h3><p class="psub">Upload the official association logo. It replaces the default crest everywhere. Cropped to a square in your browser.</p>
+ <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+  <div style="border:1px solid var(--line);border-radius:12px;padding:12px;background:#FDFDF9">${crestHTML(72)}</div>
+  <div><div class="actions" style="margin-top:0"><button type="button" class="btn pri" data-act="logo">${ic('cam')} Upload & crop logo</button>${S.brand.logo?`<button type="button" class="btn dng sm" data-act="resetlogo">Reset to default crest</button>`:''}</div>
+  <small style="color:var(--mut);display:block;margin-top:8px">Current: ${S.brand.logo?'Custom logo — applied system-wide':'Default baobab crest'} · Recommended: PNG/JPG, plain background</small></div></div></div>
+ <div class="panel rv"><h3>${ic('cog')} System settings</h3><p class="psub">Changes are logged to the audit trail. Contribution figures mirror Schedule 1 of the constitution.</p>
+ <form class="form" data-form="settings">
+ <div class="field"><label>Minimum monthly contribution (KSh)</label><input type="number" name="min" value="${s.min}" min="1"></div>
+ <div class="field"><label>Death benefit (KSh)</label><input type="number" name="death" value="${s.death}"></div>
+ <div class="field"><label>Emergency cap (KSh)</label><input type="number" name="emer" value="${s.emer}"></div>
+ <div class="field"><label>SMS notifications</label><select name="sms"><option ${s.sms?'selected':''}>Enabled</option><option ${s.sms?'':'selected'}>Disabled</option></select></div>
+ <div class="field"><label>Dual financial control</label><select name="dual"><option ${s.dual?'selected':''}>Required</option><option ${s.dual?'':'selected'}>Off</option></select></div>
+ <div class="field"><label>Historical records</label><input value="Always locked (Article 16)" disabled></div>
+ <button type="submit" class="btn pri">${ic('stamp')} Save settings</button></form></div>
+ <div class="locknote rv">${ic('lock')}<div><b>Governance lock.</b> Payment-approval authority is <b>not</b> granted to the Administrator automatically. Payment authority resides with the Chairperson under Article 18, with execution by the Treasurer.</div></div>`},
+ audit(){return `<div class="panel rv"><h3>${ic('ledger')} Audit log — every consequential action</h3><p class="psub">Immutable, time-stamped, actor-attributed. Exportable for the auditor.</p>
+ ${tbl(['Time','Actor','Action','Detail'],S.audit.map(a=>`<tr><td class="mono" style="white-space:nowrap">${a.t}</td><td><b>${a.who}</b></td><td>${a.act}</td><td style="color:var(--mut)">${a.det}</td></tr>`).join(''))}
+ <div class="actions"><button type="button" class="btn gho sm" data-act="exp" data-id="audit log">${ic('doc')} Export audit log (CSV)</button></div></div>`}},
+
+chair:{
+ dash(){const pend=pendNonChair();const open=S.cases.filter(c=>c.status!=='Paid'&&c.status!=='Rejected').length;const pendC=S.cases.filter(c=>c.status==='Pending Approval').length;return `
+ <div class="tiles">${tile('users','Total Members',S.members.filter(m=>m.status==='Active').length,S.members.filter(m=>m.status==='Pending Verification').length+' pending approval','var(--green)')}${tile('alert','Open Welfare Cases',open,'in documentation or approval','var(--red)')}${tile('stamp','Pending Approvals',pendC,'awaiting your decision','var(--goldD)')}${tile('cal','Upcoming Meetings',S.meetings.length,'scheduled meetings','var(--blue)')}</div>
+ ${S.creds.chair.u!=='—'?`<div class="govnote rv">${ic('shield')}<div><b>Your login credentials:</b> username <b class="mono">${S.creds.chair.u}</b> · password is the one registered with. Keep them private (Article 6).</div></div>`:''}
+ ${selfPanel()}
+ <div class="panel rv"><h3>${ic('stamp')} Registrations awaiting your approval</h3><p class="psub">Approve members, the Secretary and the Treasurer here. (The Chairperson is approved only by the Administrator.)</p>
+ ${pend.length?pend.map(m=>regCard(m,'me')).join(''):'<p style="color:var(--mut);font-size:13.5px">No registrations awaiting your approval.</p>'}</div>
+ <div class="grid2"><div class="panel rv"><h3>${ic('stamp')} Welfare cases awaiting your approval</h3>
+ ${S.cases.filter(c=>c.status==='Pending Approval').map(c=>`<div class="caserow"><div class="ch"><b>${c.id}</b><span class="pill p-b">${c.type}</span><span class="amt">${money(c.amt)}</span></div><div style="font-size:13px;color:var(--mut)">${c.member} → ${c.ben}</div><div class="actions"><button type="button" class="btn pri sm" data-act="approve" data-id="${c.id}">Approve</button><button type="button" class="btn gho sm" data-act="nav" data-id="approvals">Open review desk</button></div></div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">Nothing is pending. The queue is clear.</p>'}</div>
+ <div class="panel rv"><h3>${ic('cal')} Meetings & resolutions</h3>
+ ${S.meetings.slice(0,2).map(m=>`<div class="caserow"><div class="ch"><b>${m.title}</b>${pill(m.agendaStatus==='Approved'?'Approved':'Draft')}</div><div style="font-size:13px;color:var(--mut)">${m.date} · ${m.venue}</div><div class="actions">${m.agendaStatus!=='Approved'?`<button type="button" class="btn gld sm" data-act="agendaok" data-id="${m.id}">Approve agenda</button>`:''}<button type="button" class="btn gho sm" data-act="nav" data-id="meetings">Meetings desk</button></div></div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">No meetings scheduled yet.</p>'}</div></div>
+ <div class="panel rv"><h3>${ic('users')} Chairperson's responsibilities</h3>
+ ${tbl(['Area',"Chairperson's work"],[['Leadership','Lead and supervise association operations.'],['Approvals of people','Approve & activate the Secretary, Treasurer and all members after they register.'],['Welfare cases','Review cases; ensure assistance follows approved rules.'],['Financial oversight','Review financial reports and monitor authorised payments — read-only.'],['Meetings','Chair meetings; ensure resolutions are implemented.'],['Accountability','Ensure transparent operation according to the constitution.'],['Emergencies','Coordinate urgent welfare responses within approved authority.'],['Reports','Review membership, welfare and financial reports.']].map(r=>`<tr class="resp"><td><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join(''))}</div>
+ <div class="locknote rv">${ic('lock')}<div><b>Restriction in force:</b> you cannot change or delete historical financial transactions. Corrections follow a traceable process through the Treasurer with appropriate authorisation (Article 16).</div></div>`},
+ members(){const pend=pendNonChair();return `
+ ${pend.length?`<div class="panel rv"><h3>${ic('stamp')} Approve &amp; activate registrations</h3><p class="psub">Members, Secretary and Treasurer are activated by you after they register.</p>${pend.map(m=>regCard(m,'me')).join('')}</div>`:''}
+ <div class="panel rv"><h3>${ic('users')} Membership roll</h3><p class="psub">With 35 × 45 mm photographs, TSC and ID numbers. Record editing belongs to the Secretary.</p>
+ <input style="padding:9px 12px;border:1px solid var(--line);border-radius:9px;max-width:300px;margin-bottom:12px;display:block" placeholder="Search name, school, TSC or ID…" oninput="filterMem(this.value)">
+ <div id="memwrap">${memTable(true)}</div></div>`},
+ officers(){return `<div class="panel rv"><h3>${ic('stamp')} Manage Secretary & Treasurer</h3><p class="psub">You approve and activate these offices from their registrations; administer them within authorised limits. Membership itself is unaffected.</p>
+ ${['secretary','treasurer'].map(k=>{const o=S.officers[k];const mm=S.members.find(x=>x.role===OFFROLE[k]);return `<div class="offc"><div class="oav">${mm&&mm.photo?`<img src="${mm.photo}">`:initials(o.name)}</div><div style="flex:1"><b>${o.name}</b>${mm?`<small>TSC ${mm.tsc} · ID ${mm.idno} · ${mm.school}</small>`:`<small>Office vacant — awaiting registration &amp; your approval</small>`}<small>${k==='secretary'?'Member records · cases · meetings · communication':'Contributions · payments · statements · reconciliation'}</small></div>${pill(o.status)}${o.status==='Active'?`<button type="button" class="btn gho sm" data-act="officer" data-id="${k}">Place on leave</button>`:o.status==='On Leave'?`<button type="button" class="btn gho sm" data-act="officer" data-id="${k}">Restore to duty</button>`:''}</div>`}).join('')}</div>
+ <div class="govnote rv">${ic('shield')}<div><b>Segregation of duties:</b> the Secretary documents cases; the Treasurer verifies and pays; the Chairperson approves. No office combines all three — including your own.</div></div>`},
+ cases(){return `<div class="panel rv"><h3>${ic('alert')} All welfare cases</h3><p class="psub">Secretary's documentation is visible; financial processing status is read-only here.</p>${caseCards('view')||'<p style="color:var(--mut);font-size:13.5px">No welfare cases yet.</p>'}</div>`},
+ approvals(){const pend=S.cases.filter(c=>c.status==='Pending Approval');return `
+ <div class="govnote rv">${ic('stamp')}<div><b>Approval procedure (Article 18):</b> documentation by Secretary ✓ → verification by Treasurer ✓ → <b>approval by Chairperson</b> → payment by Treasurer. Approvals are time-stamped in the audit trail.</div></div>
+ <div class="panel rv"><h3>${ic('stamp')} Review desk</h3>${pend.length?caseCards('chair'):'<p style="color:var(--mut)">No items pending approval. The association is clear.</p>'}</div>`},
+ finance(){const inc=sumContribs(),exp=sumPayouts();return `
+ <div class="locknote rv">${ic('lock')}<div><b>Read-only financial oversight.</b> You may review reports and monitor authorised payments. Historical transactions cannot be modified or deleted from this office; corrections are treasurer adjusting entries with an audit trail.</div></div>
+ <div class="tiles">${tile('coins','Association Fund',inc-exp,'verified contributions minus benefits paid','var(--green)','KSh ')}${tile('chart','Contributions Verified',inc,'verified by the Treasurer','var(--goldD)','KSh ')}${tile('coins','Benefits Paid',exp,'disbursements to date','var(--red)','KSh ')}${tile('alert','Evidence Awaiting Verification',pendContribs().length,'member payment proofs','var(--blue)')}</div>
+ ${contribQueue('Contribution evidence — countersignature desk')}
+ <div class="panel rv"><h3>${ic('chart')} Monthly contributions (verified)</h3>${bars()}</div>
+ <div class="grid2"><div class="panel rv"><h3>${ic('ledger')} Welfare cases pipeline</h3>${caseCards('view')||'<p style="color:var(--mut);font-size:13.5px">No cases yet.</p>'}</div>
+ <div class="panel rv"><h3>${ic('coins')} Latest receipts</h3>${tbl(['Ref','Member','Amount','Status'],S.contribs.slice(0,6).map(c=>`<tr><td class="mono">${c.ref}</td><td>${memName(c.m)}</td><td class="mono">${money(c.amt)}</td><td>${pill(c.status)}</td></tr>`).join(''))}</div></div>`},
+ meetings(){if(!S.meetings.length)return `<div class="panel rv"><h3>${ic('cal')} Meetings & resolutions</h3><p class="psub">No meetings scheduled yet. When a meeting is convened, its agenda, minutes and resolutions will appear here for your approval.</p></div>`;
+ return `<div class="panel rv"><h3>${ic('cal')} Meetings & resolutions</h3>
+ ${S.meetings.map(m=>`<div class="caserow"><div class="ch"><b>${m.title}</b>${pill(m.agendaStatus==='Approved'?'Approved':'Draft')}<span style="margin-left:auto;font-size:12.5px;color:var(--mut)">${m.date}</span></div>
+ <div style="font-size:13px;color:var(--mut)">${m.venue}${m.att?' · '+m.att:''}</div>
+ ${m.agenda.length?`<div style="margin-top:8px;font-size:13.5px"><b style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)">Agenda</b><ol style="padding-left:20px;margin-top:4px">${m.agenda.map(a=>`<li>${a}</li>`).join('')}</ol></div>`:''}
+ <div class="actions">${m.agendaStatus==='Draft'?`<button type="button" class="btn gld sm" data-act="agendaok" data-id="${m.id}">${ic('stamp')} Approve agenda</button>`:''}
+ ${m.minutes?`<details style="width:100%"><summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--green)">View adopted minutes</summary><p style="font-size:13.5px;margin-top:8px;background:#FDFDF9;border-radius:8px;padding:12px">${m.minutes}</p></details>`:''}</div></div>`).join('')}</div>`},
+ reports(){return `<div class="grid3">${[['users','Membership Report','Roll with photographs, TSC & ID numbers, status, arrears and beneficiary coverage.'],['alert','Welfare Cases Report','Open, pending and closed cases with documentation status.'],['chart','Financial Oversight Report','Fund position, contributions and authorised payments (read-only).']].map(r=>`<div class="panel rv" style="margin:0"><h3>${ic(r[0])} ${r[1]}</h3><p class="psub">${r[2]}</p><button type="button" class="btn gho sm" data-act="exp" data-id="${r[1]}">${ic('doc')} Generate & export</button></div>`).join('')}</div>`},
+ rules(){const s=S.settings;return `
+ <div class="panel rv"><h3>${ic('cog')} Welfare parameters</h3><p class="psub">Changes require a members' resolution and are logged. Current values reflect Schedule 1.</p>
+ <form class="form" data-form="settings">
+ <div class="field"><label>Minimum contribution (KSh)</label><input type="number" name="min" value="${s.min}"></div>
+ <div class="field"><label>Death benefit (KSh)</label><input type="number" name="death" value="${s.death}"></div>
+ <div class="field"><label>Emergency cap (KSh)</label><input type="number" name="emer" value="${s.emer}"></div>
+ <button type="submit" class="btn pri">${ic('stamp')} Record change</button></form></div>
+ <div class="panel rv"><h3>${ic('book')} The Constitution</h3><p class="psub">Full text below — draft for AGM ratification.</p>${CON.replace('class="constit rv"','class="constit"')}</div>`}},
+
+secretary:{
+ dash(){const pv=S.members.filter(m=>m.status==='Pending Verification');return `
+ <div class="tiles">${tile('users','Registered Members',S.members.filter(m=>m.status!=='Declined').length,S.members.filter(m=>m.status==='Active').length+' active · '+pv.length+' pending approval','var(--green)')}${tile('alert','Pending Cases',S.cases.filter(c=>['Pending Approval','Awaiting Documents','Approved for Payment'].includes(c.status)).length,'documentation & approval','var(--red)')}${tile('cal','Upcoming Meetings',S.meetings.length,'scheduled','var(--blue)')}${tile('meg','Unread Messages',S.notifs.filter(n=>n.role==='secretary'&&n.u).length,'case updates & notices','var(--goldD)')}</div>
+ ${selfPanel()}
+ ${pv.length?`<div class="panel rv"><h3>${ic('doc')} Registrations — for your documentation</h3><p class="psub">You document and file registrations. <b>Approval is by the Chairperson</b> (and by the Administrator for the Chairperson).</p>${pv.map(m=>regCard(m,'info')).join('')}</div>`:''}
+ <div class="grid2"><div class="panel rv"><h3>${ic('alert')} Cases needing your documentation</h3>${caseCards('view')||'<p style="color:var(--mut);font-size:13.5px">No welfare cases yet.</p>'}</div>
+ <div class="panel rv"><h3>${ic('doc')} Administrative checklist</h3>
+ ${[['File registration documents of pending applicants','y'],['Collect 35 × 45 mm photos for members without one','y'],['Prepare beneficiary nomination verification forms','y'],['Schedule the first quarterly meeting with the Chairperson','y'],['Issue contribution reminder notice','g']].map(x=>`<div style="display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #EFF1E8;font-size:13.5px"><span class="pill p-${x[1]}">${x[1]==='g'?'Done':'Open'}</span>${x[0]}</div>`).join('')}</div></div>
+ <div class="govnote rv">${ic('shield')}<div><b>Restriction in force:</b> the Secretary records and coordinates information but cannot approve registrations, verify contributions, alter confirmed contribution amounts or initiate payments.</div></div>`},
+ register(){const pv=S.members.filter(m=>m.status==='Pending Verification');return `
+ ${pv.length?`<div class="panel rv"><h3>${ic('doc')} Portal registrations — pending approval</h3><p class="psub">Verify identity, TSC number, photographs, scanned ID, beneficiary and next of kin, then file the documents. <b>Approval &amp; activation: Chairperson</b> (Administrator for the Chairperson).</p>
+ ${pv.map(m=>regCard(m,'info')).join('')}</div>`:''}
+ <div class="grid2"><div class="panel rv"><h3>${ic('users')} Register new member (office entry)</h3><p class="psub">Admission completes after the Chairperson's approval and the first receipted contribution (Article 4).</p>
+ <form class="form" data-form="addMember">
+ <div class="field"><label>Full name</label><input name="name" required placeholder="e.g., Mary W. Kamau"></div>
+ <div class="field"><label>TSC number</label><input name="tsc" placeholder="e.g., 1234567"></div>
+ <div class="field"><label>National ID number</label><input name="idno" placeholder="e.g., 23456789"></div>
+ <div class="field"><label>School</label><input name="school" required placeholder="e.g., Vipingo Primary"></div>
+ <div class="field"><label>Phone</label><input name="phone" placeholder="07XX XXX XXX"></div>
+ <button type="submit" class="btn pri">${ic('users')} Register member</button></form>
+ <p class="psub" style="margin-top:10px">After registering, upload the member's 35 × 45 mm photo from the register below.</p></div>
+ <div class="panel rv"><h3>${ic('doc')} Beneficiary nominations awaiting verification</h3>
+ ${S.members.filter(m=>m.ben.s==='Pending Verification').map(m=>`<div class="caserow"><div class="ch"><b>${m.name}</b>${pill(m.ben.s)}</div><div style="font-size:13px;color:var(--mut)">Nominee: ${m.ben.n} · ID ${m.ben.id||'—'} (${m.ben.r}) · ${m.ben.p}</div><div class="actions"><button type="button" class="btn gld sm" data-act="verifyben" data-id="${m.id}">Verify nomination</button></div></div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">All nominations verified.</p>'}
+ ${S.members.filter(m=>m.ben.n==='None on file').map(m=>`<div class="caserow"><div class="ch"><b>${m.name}</b><span class="pill p-r">No beneficiary on file</span></div><div style="font-size:13px;color:var(--mut)">Follow up: Article 7 requires a written nomination with ID number and photograph.</div></div>`).join('')}</div></div>
+ <div class="panel rv"><h3>${ic('users')} Membership register — photos 35 × 45 mm</h3><input style="padding:9px 12px;border:1px solid var(--line);border-radius:9px;max-width:300px;margin-bottom:12px;display:block" placeholder="Search name, school, TSC or ID…" oninput="filterMem(this.value)"><div id="memwrap">${memTable(true,true)}</div></div>`},
+ cases(){return `<div class="grid2"><div class="panel rv"><h3>${ic('alert')} Open a welfare case</h3>
+ <form class="form" data-form="openCase">
+ <div class="field"><label>Case type</label><select name="type"><option>Death Benefit</option><option>Emergency — Hospitalisation</option><option>Emergency — Fire / Disaster</option><option>Emergency — Bereavement</option></select></div>
+ <div class="field"><label>Member</label><select name="member">${S.members.filter(m=>m.status==='Active').map(m=>`<option value="${m.id}">${m.name} (${m.id})</option>`).join('')}<option value="DEC">Deceased member — beneficiary claim</option></select></div>
+ <div class="field"><label>Requested amount (KSh)</label><input type="number" name="amt" value="${S.settings.emer}"></div>
+ <div class="field" style="grid-column:1/-1"><label>Brief description</label><textarea name="desc" rows="2" required></textarea></div>
+ <button type="submit" class="btn pri">${ic('alert')} Open case</button></form></div>
+ <div class="panel rv"><h3>${ic('doc')} Case pipeline</h3>
+ ${tbl(['Stage','Cases'],`<tr><td>Awaiting documents</td><td>${S.cases.filter(c=>c.status==='Awaiting Documents').length}</td></tr><tr><td>Pending approval</td><td>${S.cases.filter(c=>c.status==='Pending Approval').length}</td></tr><tr><td>Approved for payment</td><td>${S.cases.filter(c=>c.status==='Approved for Payment').length}</td></tr><tr><td>Paid / closed</td><td>${S.cases.filter(c=>c.status==='Paid').length}</td></tr>`)}
+ <p class="psub" style="margin-top:10px">Financial processing status is visible from the Treasurer's desk but not editable here.</p></div></div>
+ <div class="panel rv"><h3>${ic('alert')} All cases</h3>${caseCards('view')||'<p style="color:var(--mut);font-size:13.5px">No welfare cases yet.</p>'}</div>`},
+ docs(){return `<div class="panel rv"><h3>${ic('doc')} Case documentation</h3><p class="psub">Tick off received documents. Complete files move cases forward in the approval chain.</p>
+ ${S.cases.map(c=>`<div class="caserow"><div class="ch"><b>${c.id}</b><span class="pill p-b">${c.type}</span>${pill(c.status)}</div>
+ <div class="actions" style="margin-top:6px">${Object.keys(c.docs).map(k=>`<button type="button" class="btn sm ${c.docs[k]?'pri':'gho'}" data-act="vdoc" data-id="${c.id}" data-k="${k}">${c.docs[k]?'✓':'○'} ${k}</button>`).join('')}</div></div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">No cases to document yet.</p>'}</div>`},
+ meetings(){if(!S.meetings.length)return `<div class="panel rv"><h3>${ic('cal')} Meetings & minutes</h3><p class="psub">No meetings scheduled yet. When the Chairperson convenes a meeting, prepare the agenda and minutes here.</p></div>`;
+ const m=S.meetings[0];return `
+ <div class="grid2"><div class="panel rv"><h3>${ic('cal')} Agenda builder — ${m.title}</h3><p class="psub">${m.date} · ${m.venue} · Status: ${pill(m.agendaStatus==='Approved'?'Approved':'Draft')}</p>
+ <ol style="padding-left:20px;font-size:14px;margin-bottom:12px">${m.agenda.map(a=>`<li style="margin-bottom:4px">${a}</li>`).join('')}</ol>
+ <form class="form" data-form="agendaItem"><div class="field"><label>Add agenda item</label><input name="item" required placeholder="e.g., Beneficiary nominations review"></div><button type="submit" class="btn gld sm">Add</button></form></div>
+ <div class="panel rv"><h3>${ic('doc')} Minutes</h3><form class="form full" data-form="minutes"><div class="field"><label>Record / amend minutes (draft)</label><textarea name="txt" rows="5" placeholder="Type minutes of the meeting…"></textarea></div><button type="submit" class="btn pri sm">Save minutes draft</button></form></div></div>`},
+ comms(){return `<div class="grid2"><div class="panel rv"><h3>${ic('meg')} Compose announcement</h3>
+ <form class="form full" data-form="announce"><div class="field"><label>Notice to members</label><textarea name="txt" rows="4" required placeholder="e.g., Contributions open — Paybill 820 440, Account: membership number."></textarea></div><button type="submit" class="btn pri">${ic('meg')} Send announcement</button></form></div>
+ <div class="panel rv"><h3>${ic('doc')} Recent communications</h3>${S.ann.map(a=>`<div class="ann"><small>${a.date} · Secretary's office</small>${a.txt}</div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">No announcements sent yet.</p>'}</div></div>`},
+ reports(){return `<div class="grid3">${[['users','Membership Roll',S.members.filter(m=>m.status!=='Declined').length+' registered · photo compliance '+S.members.filter(m=>m.photo).length+'/'+Math.max(S.members.filter(m=>m.status!=='Declined').length,1)],['alert','Case Status Report',S.cases.length+' case(s) on record'],['cal','Meetings & Minutes',S.meetings.length+' meeting(s) scheduled']].map(r=>`<div class="panel rv" style="margin:0"><h3>${ic(r[0])} ${r[1]}</h3><p class="psub">${r[2]}</p><button type="button" class="btn gho sm" data-act="exp" data-id="${r[1]}">${ic('doc')} Export for Chairperson</button></div>`).join('')}</div>`}},
+
+treasurer:{
+ dash(){const pendAmt=S.cases.filter(c=>['Approved for Payment','Pending Approval'].includes(c.status)).reduce((a,c)=>a+c.amt,0);const cm=curMonth();const contribM=new Set(S.contribs.filter(c=>c.status==='Verified'&&c.month===cm).map(c=>c.m)).size;const act=S.members.filter(m=>m.status==='Active').length;return `
+ <div class="tiles">${tile('coins','Verified Contributions',sumContribs(),'verified by you · minimum KSh '+S.settings.min.toLocaleString(),'var(--green)','KSh ')}${tile('users','Contributors This Month',contribM,'of '+act+' active members ('+cm+')','var(--blue)')}${tile('coins','Evidence Awaiting Verification',pendContribs().length,'member payment proofs to check','var(--goldD)')}${tile('alert','Pending Welfare Payments',pendAmt,'approved + awaiting approval','var(--red)','KSh ')}</div>
+ ${selfPanel()}
+ ${contribQueue('Contribution evidence awaiting verification')}
+ <div class="grid2"><div class="panel rv"><h3>${ic('alert')} Arrears watch</h3>
+ ${S.members.filter(m=>m.arrears).map(m=>`<div class="caserow"><div class="ch"><b>${m.name}</b><span class="pill p-r">Overdue — ${m.arrears}</span><span class="amt">${money(S.settings.min)}</span></div><div style="font-size:13px;color:var(--mut)">${m.school} · ${m.id}</div><div class="actions"><button type="button" class="btn gho sm" data-act="exp" data-id="reminder to ${m.name}">${ic('meg')} Send reminder</button></div></div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">No arrears recorded.</p>'}</div>
+ <div class="panel rv"><h3>${ic('coins')} Latest receipts</h3>${tbl(['Ref','Member','Amount','Status'],S.contribs.slice(0,6).map(c=>`<tr><td class="mono">${c.ref}</td><td>${memName(c.m)}</td><td class="mono">${money(c.amt)}</td><td>${pill(c.status)}</td></tr>`).join(''))}</div></div>
+ <div class="panel rv"><h3>${ic('chart')} Contributions curve (verified)</h3>${bars()}</div>
+ <div class="govnote rv">${ic('shield')}<div><b>Restriction in force:</b> the Treasurer cannot approve their own payment request or verify their own contribution (Article 16) — those are countersigned by the Chairperson. Historical transactions cannot be removed.</div></div>`},
+ contribs(){return `
+ ${contribQueue('Member payments awaiting your verification')}
+ <div class="grid2"><div class="panel rv"><h3>${ic('coins')} Record a contribution (office entry)</h3><p class="psub">Use when you receive cash/bank payment directly and hold the evidence yourself. The KSh ${S.settings.min.toLocaleString()} minimum is enforced. Member-submitted payments arrive above with evidence for verification.</p>
+ <form class="form" data-form="recordCon">
+ <div class="field"><label>Member</label><select name="m">${S.members.filter(m=>m.status==='Active').map(m=>`<option value="${m.id}">${m.name} (${m.id})</option>`).join('')}</select></div>
+ <div class="field"><label>Month</label><select name="month">${[curMonth(),...MONTHS.map(m=>m+' '+new Date().getFullYear()).filter(x=>x!==curMonth())].map(m=>`<option ${m===curMonth()?'selected':''}>${m}</option>`).join('')}</select></div>
+ <div class="field"><label>Amount (KSh, min ${S.settings.min.toLocaleString()})</label><input type="number" name="amt" min="${S.settings.min}" value="${S.settings.min}" required></div>
+ <div class="field"><label>Payment reference</label><input name="ref" required placeholder="MPESA / BANK ref"></div>
+ <button type="submit" class="btn pri">${ic('coins')} Record contribution</button></form></div>
+ <div class="panel rv"><h3>${ic('alert')} Missing this month</h3>
+ ${S.members.filter(m=>m.status==='Active'&&!S.contribs.find(c=>c.m===m.id&&c.month===curMonth()&&c.status!=='Rejected')).map(m=>`<div class="caserow"><div class="ch"><b>${m.name}</b><span class="pill p-r">Not received — ${curMonth()}</span></div><div style="font-size:13px;color:var(--mut)">${m.school} · TSC ${m.tsc}</div></div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">All active members have contributed this month.</p>'}</div></div>
+ <div class="panel rv"><h3>${ic('ledger')} Contributions ledger</h3>${tbl(['Receipt','Member','Month','Date','Method','Ref','Amount','Evidence','Status'],S.contribs.map(c=>`<tr><td class="mono">${c.id}</td><td>${memName(c.m)}</td><td>${c.month}</td><td>${c.date}</td><td>${c.method||'—'}</td><td class="mono">${c.ref}</td><td class="mono">${money(c.amt)}</td><td>${evLink(c)}</td><td>${c.status==='Pending Verification'?`<button type="button" class="btn sm gld" data-act="vpay" data-id="${c.id}">Verify</button> <button type="button" class="btn sm dng" data-act="rpay" data-id="${c.id}">Reject</button>`:pill(c.status)}</td></tr>`).join(''))}</div>`},
+ payments(){return `<div class="panel rv"><h3>${ic('ledger')} Contributions ledger — full history</h3><p class="psub">Traceable and immutable; only verified contributions count toward the Fund. Corrections appear as adjusting entries.</p>
+ ${tbl(['Receipt','Member','Month','Date','Reference','Amount','Status'],S.contribs.map(c=>`<tr><td class="mono">${c.id}</td><td>${memName(c.m)}</td><td>${c.month}</td><td>${c.date}</td><td class="mono">${c.ref}</td><td class="mono">${money(c.amt)}</td><td>${pill(c.status)}</td></tr>`).join(''))}</div>
+ <div class="panel rv"><h3>${ic('coins')} Welfare disbursements</h3>${tbl(['Voucher','Case','Paid to','Date','Reference','Amount'],S.payouts.map(p=>`<tr><td class="mono">${p.id}</td><td class="mono">${p.case}</td><td>${p.to}</td><td>${p.date}</td><td class="mono">${p.ref}</td><td class="mono">${money(p.amt)}</td></tr>`).join(''))}</div>`},
+ welfare(){const ready=S.cases.filter(c=>c.status==='Approved for Payment');return `
+ <div class="govnote rv">${ic('stamp')}<div><b>Payment gate:</b> disbursement buttons unlock only after the Chairperson's approval has been recorded. Benefits to office-bearers additionally require a countersigning officer (Article 16).</div></div>
+ <div class="panel rv"><h3>${ic('stamp')} Ready for payment</h3>${ready.length?caseCards('treas'):'<p style="color:var(--mut);font-size:13.5px">No approved payments waiting.</p>'}</div>
+ <div class="panel rv"><h3>${ic('alert')} Upstream in the approval chain</h3>${caseCards('view')||'<p style="color:var(--mut);font-size:13.5px">No welfare cases yet.</p>'}</div>`},
+ statements(){const inc=sumContribs(),exp=sumPayouts();return `
+ <div class="tiles">${tile('coins','Verified Contributions',inc,'income to date','var(--green)','KSh ')}${tile('chart','Verified Receipts',S.contribs.filter(c=>c.status==='Verified').length,'plus '+pendContribs().length+' awaiting verification','var(--goldD)')}${tile('coins','Benefits Paid',exp,'expenditure','var(--red)','KSh ')}${tile('ledger','Fund Balance',inc-exp,'verified contributions minus payments','var(--blue)','KSh ')}</div>
+ <div class="grid2"><div class="panel rv"><h3>${ic('chart')} Statement of the Fund</h3>${tbl(['Line','Amount (KSh)'],`<tr><td>Add: verified contributions</td><td class="mono">${inc.toLocaleString('en-KE')}</td></tr><tr><td>Less: welfare disbursements</td><td class="mono" style="color:var(--red)">(${exp.toLocaleString('en-KE')})</td></tr><tr style="background:var(--green3)"><td><b>Fund balance</b></td><td class="mono"><b>${(inc-exp).toLocaleString('en-KE')}</b></td></tr><tr><td colspan="2" style="color:var(--mut);font-size:12.5px">Pending death-benefit commitments: ${money(S.cases.filter(c=>c.status==='Pending Approval'&&c.type==='Death Benefit').reduce((a,c)=>a+c.amt,0))}</td></tr>`)}
+ <div class="actions"><button type="button" class="btn gho sm" data-act="exp" data-id="Monthly statement">Monthly statement</button><button type="button" class="btn gho sm" data-act="exp" data-id="Quarterly statement">Quarterly statement</button><button type="button" class="btn gho sm" data-act="exp" data-id="Annual statement">Annual statement</button></div></div>
+ <div class="panel rv"><h3>${ic('chart')} Monthly contributions (verified)</h3>${bars()}</div></div>`},
+ recon(){return `<div class="panel rv"><h3>${ic('ledger')} Reconciliation</h3><p class="psub">Compare verified receipts against the Paybill / bank statement. Toggle each line as it matches.</p>
+ ${tbl(['Receipt','Reference','Amount','Bank / M-PESA line','Status'],S.contribs.filter(c=>c.status==='Verified').map(c=>`<tr><td class="mono">${c.id}</td><td class="mono">${c.ref}</td><td class="mono">${money(c.amt)}</td><td class="mono" style="color:var(--mut)">${c.ref}</td><td>${c.matched?pill('Matched')+` <button type="button" class="btn sm gho" data-act="recon" data-id="${c.id}">Unmatch</button>`:`${pill('Unmatched')} <button type="button" class="btn sm gld" data-act="recon" data-id="${c.id}">Mark matched</button>`}</td></tr>`).join(''))}</div>
+ <div class="govnote rv">${ic('shield')}<div>Reconciliations are uploaded to the audit trail and are visible to the Chairperson's oversight desk.</div></div>`},
+ audit(){return `<div class="panel rv"><h3>${ic('shield')} Financial audit trail</h3>${tbl(['Time','Actor','Action','Detail'],S.audit.map(a=>`<tr><td class="mono" style="white-space:nowrap">${a.t}</td><td><b>${a.who}</b></td><td>${a.act}</td><td style="color:var(--mut)">${a.det}</td></tr>`).join(''))}</div>`}},
+
+member:{
+ dash(){const me=ME();if(!me)return '';const my=S.contribs.filter(c=>c.m===me.id&&c.status==='Verified');const pendMy=S.contribs.filter(c=>c.m===me.id&&c.status==='Pending Verification');const myCases=S.cases.filter(c=>c.member.includes(me.id));return `
+ <div class="tiles">${tile('coins','Personal Contributions',my.reduce((a,c)=>a+c.amt,0),'verified by the Treasurer · since '+me.joined,'var(--green)','KSh ')}${tile('cal','Months Paid',new Set(my.map(c=>c.month)).size,'verified months','var(--blue)')}${tile('alert','My Welfare Requests',myCases.length,'on record','var(--goldD)')}${tile('bell','Notifications',S.notifs.filter(n=>n.role==='member'&&n.u).length,'unread','var(--red)')}</div>
+ ${pendMy.length?`<div class="govnote rv">${ic('coins')}<div>You have <b>${pendMy.length}</b> contribution(s) awaiting the Treasurer's verification — ${pendMy.map(p=>money(p.amt)+' ('+p.month+')').join(', ')}. They will appear in your totals once verified.</div></div>`:''}
+ <div class="grid2"><div class="panel rv"><h3>${ic('meg')} Association announcements</h3>${S.ann.map(a=>`<div class="ann"><small>${a.date}</small>${a.txt}</div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">No announcements yet.</p>'}</div>
+ <div class="panel rv"><h3>${ic('alert')} My welfare cases</h3>${caseCards('view')||'<p style="color:var(--mut)">No cases on record.</p>'}
+ <div class="actions"><button type="button" class="btn pri sm" data-act="nav" data-id="assist">${ic('alert')} Request emergency assistance</button><button type="button" class="btn gld sm" data-act="nav" data-id="contribs">${ic('coins')} Pay my contribution</button></div></div></div>
+ <div class="govnote rv">${ic('book')}<div><b>Your responsibilities (Article 6):</b> pay the monthly contribution of at least <b>KSh ${S.settings.min.toLocaleString()}</b> with payment evidence, keep your details, photograph, beneficiary and next of kin current, protect your login credentials (<b class="mono">${me.user}</b>), and report discrepancies promptly.</div></div>`},
+ profile(){const me=ME();if(!me)return '';return `
+ <div class="grid2"><div class="panel rv"><h3>${ic('users')} My profile</h3>
+ <div style="display:flex;gap:18px;align-items:center;margin-bottom:16px">${photoBox(me,'big')}
+ <div><b style="font-family:var(--disp);font-size:17px">${me.name}</b><div style="font-size:13px;color:var(--mut)">${me.school} · ${me.id}</div>
+ <button type="button" class="btn gho sm" style="margin-top:9px" data-act="myphoto">${ic('cam')} ${me.photo?'Change photo':'Upload photo'} · 35 × 45 mm</button></div></div>
+ <dl class="kv"><dt>Membership No.</dt><dd class="mono">${me.id}</dd><dt>Username</dt><dd class="mono">${me.user}</dd><dt>TSC number</dt><dd class="mono">${me.tsc}</dd><dt>National ID</dt><dd class="mono">${me.idno}</dd><dt>School</dt><dd>${me.school} · Kilifi County</dd><dt>Position</dt><dd>${me.position}${me.role!=='—'&&me.role!==me.position?' · '+me.role:''}</dd><dt>Joined</dt><dd>${me.joined}</dd><dt>Status</dt><dd>${pill(me.status)}</dd><dt>Phone</dt><dd class="mono">${me.phone}</dd><dt>ID scan</dt><dd>${me.scan?`<a href="${me.scan}" target="_blank" style="color:var(--green);font-weight:700">View scanned ID</a>`:pill('Not Recorded')}</dd></dl></div>
+ <div class="panel rv"><h3>${ic('users')} Next of kin</h3><p class="psub">Contacted by the association in an emergency (Article 10).</p>
+ <dl class="kv"><dt>Name</dt><dd>${me.nok.n}</dd><dt>ID number</dt><dd class="mono">${me.nok.id}</dd><dt>Phone</dt><dd class="mono">${me.nok.p}</dd></dl>
+ <h3 style="margin-top:20px">${ic('cog')} Update contact details</h3><p class="psub">Name, school and TSC/ID changes require the Secretary's verification.</p>
+ <form class="form" data-form="profile"><div class="field"><label>Phone</label><input name="phone" value="${me.phone}"></div><div class="field"><label>Next of kin phone</label><input name="kp" value="${me.nok.p}"></div><button type="submit" class="btn pri">Save changes</button></form></div></div>`},
+ contribs(){const me=ME();if(!me)return '';const my=S.contribs.filter(c=>c.m===me.id);const pendMy=my.filter(c=>c.status==='Pending Verification').length;return `
+ <div class="tiles">${tile('coins','Total Contributed',my.filter(c=>c.status==='Verified').reduce((a,c)=>a+c.amt,0),'verified amounts only','var(--green)','KSh ')}${tile('cal','Months Paid',new Set(my.filter(c=>c.status==='Verified').map(c=>c.month)).size,'verified months','var(--blue)')}${tile('coins','Monthly Minimum',S.settings.min,'per Article 8','var(--goldD)','KSh ')}</div>
+ ${pendMy?`<div class="govnote rv">${ic('coins')}<div><b>${pendMy}</b> contribution(s) awaiting the Treasurer's verification. They will reflect here and on the Treasurer's dashboard once approved.</div></div>`:''}
+ <div class="panel rv"><h3>${ic('coins')} Pay my monthly contribution</h3><p class="psub">Enter the amount you paid and upload the <b>M-PESA screenshot or scanned bank receipt</b>. The Treasurer verifies it; once approved, it reflects automatically on your dashboard and the Treasurer's records (Article 8).</p>
+ ${payFormHTML()}</div>
+ <div class="panel rv"><h3>${ic('ledger')} My contribution history</h3>${tbl(['Month','Receipt','Method','Reference','Date','Amount','Evidence','Status'],my.map(c=>`<tr><td><b>${c.month}</b></td><td class="mono">${c.id}</td><td>${c.method||'—'}</td><td class="mono">${c.ref}</td><td>${c.date}</td><td class="mono">${money(c.amt)}</td><td>${evLink(c)}</td><td>${pill(c.status)}${c.status==='Rejected'&&c.note?`<div style="font-size:11px;color:var(--red)">${c.note}</div>`:''}</td></tr>`).join(''))}</div>`},
+ assist(){const me=ME();return `
+ <div class="grid2"><div class="panel rv"><h3>${ic('doc')} Death benefit — how it works</h3>
+ <dl class="kv"><dt>Benefit</dt><dd><b class="mono">${money(S.settings.death)}</b> — amount approved and agreed by members</dd><dt>Payable to</dt><dd>Your written beneficiary — currently <b>${me.ben.n}</b> (${me.ben.r})</dd><dt>Claim window</dt><dd>Within 90 days of death (Article 9)</dd><dt>Documents</dt><dd>Death certificate · burial permit · beneficiary ID · chief's letter</dd><dt>Payment</dt><dd>Within 21 days of complete approval</dd></dl>
+ <div class="actions"><button type="button" class="btn gho sm" data-act="nav" data-id="beneficiary">Review my beneficiary</button></div></div>
+ <div class="panel rv"><h3>${ic('alert')} Request emergency assistance</h3><p class="psub">Covered: hospitalisation, fire/disaster, bereavement of immediate family. Cap: ${money(S.settings.emer)}.</p>
+ ${emerFormHTML()}</div></div>`},
+ beneficiary(){const me=ME();if(!me)return '';return `
+ <div class="grid2"><div class="panel rv"><h3>${ic('doc')} Current written beneficiary</h3>
+ <div style="display:flex;gap:16px;align-items:center;margin-bottom:14px">${me.ben.photo?`<img class="photo big" src="${me.ben.photo}">`:`<div class="photo ph big">${me.ben.n==='None on file'?'?':initials(me.ben.n)}</div>`}
+ <dl class="kv" style="grid-template-columns:130px 1fr"><dt>Name</dt><dd>${me.ben.n}</dd><dt>ID number</dt><dd class="mono">${me.ben.id||'—'}</dd><dt>Relationship</dt><dd>${me.ben.r}</dd><dt>Phone</dt><dd class="mono">${me.ben.p}</dd><dt>Status</dt><dd>${pill(me.ben.s)}</dd><dt>Photo 35×45</dt><dd>${me.ben.photo?pill('Uploaded'):pill('Not Recorded')}</dd></dl></div>
+ <p class="psub">The death benefit of <b class="mono">${money(S.settings.death)}</b> is paid to this person upon a verified claim (Articles 7 &amp; 9).</p></div>
+ <div class="panel rv"><h3>${ic('cog')} Update beneficiary</h3><p class="psub">Provide name, ID number, relationship, phone and a 35 × 45 mm photo. Changes take effect after the Secretary verifies them (Article 7).</p>
+ <form class="form" data-form="beneficiary">
+ <div class="field"><label>Full name</label><input name="n" required></div>
+ <div class="field"><label>ID number</label><input name="bid" required></div>
+ <div class="field"><label>Relationship</label><select name="r"><option>Spouse</option><option>Son</option><option>Daughter</option><option>Brother</option><option>Sister</option><option>Mother</option><option>Father</option><option>Other</option></select></div>
+ <div class="field"><label>Phone</label><input name="p" placeholder="07XX XXX XXX"></div>
+ <button type="button" class="btn gho sm" data-act="benphoto" style="margin-top:20px">${ic('cam')} Upload beneficiary photo (35 × 45)</button>
+ <button type="submit" class="btn pri">${ic('stamp')} Submit for verification</button></form></div></div>`},
+ notifs(){return `<div class="panel rv"><h3>${ic('bell')} My notifications</h3><div class="actions" style="margin-bottom:12px"><button type="button" class="btn gho sm" data-act="markread">Mark all as read</button></div>
+ ${S.notifs.filter(n=>n.role==='member').map(n=>`<div class="ann" ${n.u?'style="border-left-color:var(--red);background:#FBF4E4"':''}><small>${n.u?'Unread':'Read'}</small>${n.txt}</div>`).join('')||'<p style="color:var(--mut);font-size:13.5px">No notifications.</p>'}</div>`},
+ constitution(){return `<div class="panel rv" style="padding:8px">${CON}</div>`}}
+};
+
+/* ================= ROUTER ================= */
+function buildNav(){const nav=NAVS[S.role];
+ const pendCount=S.role==='chair'?pendNonChair().length:0;
+ $('#nav').innerHTML=`<div class="rlab">${{admin:'System Administrator',chair:'Chairperson',secretary:'Secretary',treasurer:'Treasurer',member:'Member'}[S.role]} menu</div>`+nav.items.map(i=>`<button type="button" data-act="nav" data-id="${i[0]}" id="nb-${i[0]}">${ic(i[2])} ${i[1]}${i[0]==='approvals'&&S.role==='chair'?`<span class="cnt">${S.cases.filter(c=>c.status==='Pending Approval').length}</span>`:''}${i[0]==='members'&&pendCount?`<span class="cnt">${pendCount}</span>`:''}${i[0]==='contribs'&&S.role==='treasurer'&&pendContribs().length?`<span class="cnt">${pendContribs().length}</span>`:''}</button>`).join('')}
+function bellCount(){const n=S.notifs.filter(x=>x.role===S.role&&x.u).length;const d=$('#bellDot');d.textContent=n;d.classList.toggle('hidden',n===0)}
+function updateUserChip(){
+ const r=S.role;if(!r)return;
+ const p=persona(r);
+ $('#uName').textContent=p[0];
+ $('#uRole').textContent=p[1];
+ const av=$('#uAv');
+ const m=r==='member'?ME():S.members.find(x=>x.role===OFFROLE[r]);
+ if(m&&m.photo){av.innerHTML=`<img src="${m.photo}" alt="${p[0]}">`}
+ else{av.textContent=initials(p[0])}}
+function render(){const nav=NAVS[S.role];const it=nav.items.find(i=>i[0]===S.page);
+ $('#pgT').textContent=it[1];$('#pgS').textContent=nav.sub;
+ $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.id===S.page));
+ $('#view').innerHTML=V[S.role][S.page]();
+ $$('#view .rv').forEach((el,i)=>el.style.animationDelay=Math.min(i*55,440)+'ms');
+ updateUserChip();
+ renderPayPreview();
+ countUp($('#view'));bellCount();refreshCrests();window.scrollTo({top:0})}
+function enterRole(r){S.role=r;S.page='dash';$('#landing').classList.add('hidden');$('#regPage').classList.add('hidden');$('#app').classList.remove('hidden');
+ buildNav();render();
+ audit(ROLEACT[r],'Sign-in','Signed in to '+persona(r)[1]+' dashboard');queuePersist();
+ toast(`Signed in as <b>${persona(r)[0]}</b> — ${persona(r)[1]}`)}
+function exit(){S.role=null;$('#app').classList.add('hidden');$('#landing').classList.remove('hidden');$('#bellPanel').classList.add('hidden')}
+function go(p){S.page=p;$('#bellPanel').classList.add('hidden');render()}
+function updateRegBoxes(){
+ $('#regPhotoBox').innerHTML=REG.photo?`<img class="ph-prev" src="${REG.photo}" alt="applicant photo"><span>Your photo<br><b style="color:var(--green)">35 × 45 mm ✓</b></span>`:`<span>Your real passport photo<br><b style="color:var(--goldD)">35 × 45 mm</b><br>plain background preferred</span>`;
+ $('#regBenBox').innerHTML=REG.ben?`<img class="ph-prev" src="${REG.ben}" alt="beneficiary photo"><span>Beneficiary photo<br><b style="color:var(--green)">35 × 45 mm ✓</b></span>`:`<span>Beneficiary passport photo<br><b style="color:var(--goldD)">35 × 45 mm</b></span>`;
+ $('#regScanBox').innerHTML=REG.scan?`<img class="scan-prev" src="${REG.scan}" alt="ID scan"><span><b style="color:var(--green)">Scanned ID attached ✓</b></span>`:`<span>Scanned national ID card<br><b style="color:var(--goldD)">JPG / PNG</b><br>front of the ID</span>`}
+function renderPayPreview(){const b=$('#payEvBox');if(!b)return;
+ b.innerHTML=PAY.ev?`<img class="ev-prev" src="${PAY.ev}" alt="payment evidence"><span><b style="color:var(--green)">Evidence attached ✓</b></span>`:`<span>M-PESA screenshot or scanned bank receipt<br><b style="color:var(--goldD)">JPG / PNG</b></span>`}
+
+/* ================= ACTIONS ================= */
+const ACT={
+ exit:()=>exit(), nav:id=>go(id),
+ adminlogin:()=>{$('#officeSel').value='admin';$('#userInp').value='admin@Kecsha.co.ke';toast(`Username prefilled — enter the default password <b>admin123</b>, then change it in System Settings`)},
+ showreg:()=>{$('#landing').classList.add('hidden');$('#regPage').classList.remove('hidden');window.scrollTo(0,0)},
+ showauth:()=>{$('#regPage').classList.add('hidden');$('#landing').classList.remove('hidden')},
+ regphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{REG.photo=d;updateRegBoxes();toast(`${ic('cam')} Your photo cropped to <b>35 × 45 mm</b>`)})),
+ regben:()=>pickFile(src=>openCrop(src,45/35,d=>{REG.ben=d;updateRegBoxes();toast(`${ic('cam')} Beneficiary photo cropped to <b>35 × 45 mm</b>`)})),
+ /* EDIT 4e: scans & evidence are compressed before saving to the cloud */
+ regscan:()=>pickFile(async src=>{REG.scan=await compressImage(src);updateRegBoxes();toast(`${ic('doc')} Scanned ID card attached`)}),
+ payev:()=>pickFile(async src=>{PAY.ev=await compressImage(src);renderPayPreview();toast(`${ic('doc')} Payment evidence attached`);queuePersist()}),
+ payevclear:()=>{PAY.ev=null;renderPayPreview()},
+ myphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{ME().photo=d;audit('Member','Own photo updated',ME().name+' · 35 × 45 mm');render();toast('Your 35 × 45 mm photo has been updated')})),
+ benphoto:()=>pickFile(src=>openCrop(src,45/35,d=>{ME().ben.photo=d;audit('Member','Beneficiary photo updated',ME().name+' → '+ME().ben.n);render();toast('Beneficiary photo updated — pending Secretary verification')})),
+ setphoto:id=>pickFile(src=>openCrop(src,45/35,d=>{const m=S.members.find(x=>x.id===id);m.photo=d;audit(ROLEACT[S.role],'Member photo uploaded',m.name+' · 35 × 45 mm cropped');render();toast(`Photo saved for <b>${m.name}</b> — 35 × 45 mm`)})),
+ logo:()=>pickFile(src=>openCrop(src,1,d=>{S.brand.logo=d;audit('System Administrator','Association logo uploaded','Branding applied system-wide');render();toast(`${ic('stamp')} Association logo uploaded and applied system-wide`)})),
+ resetlogo:()=>{S.brand.logo=null;audit('System Administrator','Logo reset','Reverted to default crest');render();toast('Reverted to the default crest')},
+ /* EDIT 4f: approval toasts no longer reveal passwords */
+ approvechair:id=>{const m=S.members.find(x=>x.id===id);if(!m)return;
+  m.status='Active';m.role='Chairperson';m.position='Chairperson';m.joined=today();
+  S.officers.chair={name:m.name,status:'Active'};S.creds.chair={u:m.user,p:m.pass};
+  audit('System Administrator','Chairperson approved & activated',`${m.name} · ${m.id} · TSC ${m.tsc} · login ${m.user}`);
+  render();toast(`${ic('stamp')} <b>${m.name}</b> approved &amp; activated as Chairperson — login username: <b>${m.user}</b> (password is the one they registered with)`);},
+ approvemem:id=>{const m=S.members.find(x=>x.id===id);if(!m)return;
+  m.status='Active';m.joined=today();
+  const posKey={Secretary:'secretary',Treasurer:'treasurer'}[m.position];
+  if(posKey){S.officers[posKey]={name:m.name,status:'Active'};S.creds[posKey]={u:m.user,p:m.pass};m.role=m.position}
+  audit('Chairperson','Registration approved & activated',`${m.name} · ${m.id} · position ${m.position} · login ${m.user}`);
+  render();toast(`${ic('stamp')} <b>${m.name}</b> approved &amp; activated — login username: <b>${m.user}</b> (password is the one they registered with)`);},
+ declinemem:id=>{const m=S.members.find(x=>x.id===id);const r=prompt('Reason for declining (recorded in audit trail):');if(r===null)return;m.status='Declined';audit(ROLEACT[S.role],'Registration declined',m.name+' — '+r);render();toast(`Registration for ${m.name} declined`,'err')},
+ vpay:id=>{const c=S.contribs.find(x=>x.id===id);if(!c||c.status!=='Pending Verification')return;
+  if(S.role==='treasurer'){const self=SELF();if(self&&c.m===self.id){toast(`${ic('lock')} <b>Article 16:</b> you cannot verify your own contribution. The Chairperson has been notified to countersign it.`,'err');S.notifs.push({role:'chair',u:true,txt:`Treasurer's own contribution ${money(c.amt)} (${c.month}) needs your countersignature.`});return}}
+  c.status='Verified';c.v=true;
+  const mm=S.members.find(x=>x.id===c.m);if(mm){mm.total+=c.amt;mm.months+=1;if(mm.arrears===c.month)delete mm.arrears}
+  audit(ROLEACT[S.role],'Contribution verified'+(S.role==='chair'?' (countersigned)':''),`${memName(c.m)} · ${c.month} · ${money(c.amt)} · ${c.method} · ref ${c.ref}`);
+  S.notifs.push({role:'member',u:true,txt:`Your ${c.month} contribution of ${money(c.amt)} has been verified ✓`});
+  render();toast(`${ic('stamp')} Verified — <b>${money(c.amt)}</b> now reflects on the member's dashboard and all treasurer records`)},
+ rpay:id=>{const r=prompt('Reason for rejecting this payment evidence (the member will see it):');if(r===null)return;
+  const c=S.contribs.find(x=>x.id===id);if(!c)return;c.status='Rejected';c.note='Rejected: '+r;
+  audit(ROLEACT[S.role],'Contribution evidence rejected',`${memName(c.m)} · ${c.month} · ${money(c.amt)} — ${r}`);
+  S.notifs.push({role:'member',u:true,txt:`Your ${c.month} contribution evidence was rejected: ${r}. Please resubmit.`});
+  render();toast('Payment evidence rejected — the member can resubmit','err')},
+ bell:()=>{const p=$('#bellPanel');p.classList.toggle('hidden');if(!p.classList.contains('hidden')){const list=S.notifs.filter(n=>n.role===S.role);p.innerHTML=`<div style="padding:10px 12px;display:flex;justify-content:space-between;align-items:center"><b style="font-size:13px">Notifications</b><button type="button" class="btn sm gho" data-act="markread">Mark all read</button></div>`+(list.length?list.map(n=>`<div class="bp ${n.u?'unread':''}">${n.txt}</div>`).join(''):'<div class="bp">All clear.</div>')}},
+ markread:()=>{S.notifs.forEach(n=>{if(n.role===S.role)n.u=false});$('#bellPanel').classList.add('hidden');render();toast('All notifications marked as read')},
+ approve:id=>{const c=S.cases.find(x=>x.id===id);if(!c)return;c.status='Approved for Payment';audit('Chairperson','Payment approved',`${c.id} — ${money(c.amt)} · ${c.type}`);S.notifs.push({role:'treasurer',u:true,txt:`${c.id} approved by Chairperson — ready for disbursement.`});render();toast(`${ic('stamp')} <b>${c.id}</b> approved — sent to Treasurer for payment`)},
+ reject:id=>{const r=prompt('Reason for rejection (recorded in audit trail):');if(r===null)return;const c=S.cases.find(x=>x.id===id);c.status='Rejected';c.note='Rejected: '+r;audit('Chairperson','Case rejected',`${c.id} — ${r}`);render();toast(`Case ${c.id} rejected`,'err')},
+ pay:id=>{const ref=prompt('Enter payment reference (e.g., M-PESA code):');if(!ref)return;const c=S.cases.find(x=>x.id===id);c.status='Paid';c.note='Paid '+today()+' · ref '+ref.toUpperCase();
+ S.payouts.push({id:'PO-'+String(S.payouts.length+1).padStart(4,'0'),case:c.id,to:c.member,amt:c.amt,date:today(),ref:ref.toUpperCase()});
+ audit('Treasurer','Disbursement recorded',`${c.id} — ${money(c.amt)} · ref ${ref.toUpperCase()}`);
+ render();toast(`${ic('coins')} <b>${money(c.amt)}</b> paid · ref ${ref.toUpperCase()}`)},
+ vdoc:(id,el)=>{const c=S.cases.find(x=>x.id===id);const k=el.dataset.k;c.docs[k]=!c.docs[k];audit('Secretary','Case documentation updated',`${c.id} — ${k} ${c.docs[k]?'received':'reopened'}`);
+ if(Object.values(c.docs).every(Boolean)&&c.status==='Awaiting Documents'){c.status='Pending Approval';S.notifs.push({role:'chair',u:true,txt:`${c.id} fully documented — pending your approval.`});toast(`${c.id} complete — moved to Chairperson for approval`)}render()},
+ verifyben:id=>{const m=S.members.find(x=>x.id===id);m.ben.s='Verified';audit('Secretary','Beneficiary verified',`${m.name} → ${m.ben.n} · ID ${m.ben.id} (${m.ben.r})`);render();toast(`Beneficiary nomination for <b>${m.name}</b> verified`)},
+ recon:id=>{const c=S.contribs.find(x=>x.id===id);c.matched=!c.matched;audit('Treasurer','Reconciliation updated',`${c.id} ${c.matched?'matched':'unmatched'}`);render()},
+ officer:id=>{const o=S.officers[id];o.status=o.status==='Active'?'On Leave':'Active';audit('Chairperson','Officer status changed',`${o.name} → ${o.status}`);render();toast(`${o.name} is now <b>${o.status}</b>`)},
+ agendaok:id=>{const m=S.meetings.find(x=>x.id===id);m.agendaStatus='Approved';audit('Chairperson','Agenda approved',m.title);render();toast(`Agenda approved for <b>${m.title}</b>`)},
+ exp:id=>toast(`${ic('doc')} <b>${id}</b> generated — export ready (demo build)`),
+ disc:id=>{audit('Member','Discrepancy reported',`${id} flagged by ${ME().name}`);toast(`Discrepancy on <b>${id}</b> reported to the Treasurer for review`)}};
+
+/* ================= FORMS ================= */
+const FORMS={
+ /* EDIT 4a: login now compares secure password hashes */
+ async login(fd){const off=fd.get('office'),u=(fd.get('user')||'').trim().toLowerCase(),p=fd.get('pass');
+  if(!u||!p){toast('Enter your username and password','err');return}
+  const hp=await sha256(p);
+  if(off==='member'){
+   const m=S.members.find(x=>x.user===u||x.id.toLowerCase()===u||x.idno===u||x.name.toLowerCase()===u);
+   if(!m){toast('Username not found — please register first','err');return}
+   if(m.pass!==hp){toast('Incorrect password for <b>'+m.name+'</b>','err');return}
+   if(m.status==='Pending Verification'){toast('Your registration is <b>awaiting '+(m.position==='Chairperson'?'the Administrator\u2019s':'the Chairperson\u2019s')+' approval</b>. Please check back shortly.','err');return}
+   if(m.status==='Declined'){toast('This registration was declined — contact the Secretary.','err');return}
+   S.meId=m.id}
+  else{const cr=S.creds[off];
+   if(cr.u==='—'){toast('This office has not been activated yet — the '+(off==='chair'?'Chairperson must register and be approved by the Administrator':'Secretary/Treasurer must be approved by the Chairperson')+'.','err');return}
+   if(u!==cr.u||hp!==cr.p){toast('Incorrect username or password for this office','err');return}}
+  enterRole(off)},
+ /* EDIT 4b: registration stores a hashed password */
+ async register(fd){const g=k=>(fd.get(k)||'').trim();
+  const req={name:'Full name',tsc:'TSC number',idno:'ID number',phone:'Phone number',school:'School',bn:'Beneficiary name',bid:'Beneficiary ID number',bphone:'Beneficiary phone',kn:'Next of kin name',kid:'Next of kin ID',kphone:'Next of kin phone',user:'Username',pass:'Password'};
+  const missing=Object.keys(req).filter(k=>!g(k));
+  if(missing.length){toast('Missing: '+missing.map(k=>req[k]).join(', '),'err');return}
+  if(g('pass')!==g('pass2')){toast('Passwords do not match','err');return}
+  if(g('pass').length<6){toast('Password must be at least 6 characters','err');return}
+  const hp=await sha256(g('pass'));
+  const uu=g('user').toLowerCase();
+  if(S.members.some(m=>m.user===uu)||Object.values(S.creds).some(c=>c.u===uu)){toast('That username is already taken — choose another','err');return}
+  if(S.members.some(m=>m.idno===g('idno'))){toast('A member with this ID number already exists','err');return}
+  if(!REG.photo){toast('Your <b>35 × 45 mm</b> photograph is required','err');return}
+  if(!REG.ben){toast('Beneficiary <b>35 × 45 mm</b> photograph is required','err');return}
+  if(!REG.scan){toast('A <b>scanned ID card</b> is required','err');return}
+  if(!$('#consent').checked){toast('You must accept the Constitution and the contribution commitment','err');return}
+  const id='KCW-'+String(S.members.length+1).padStart(3,'0');
+  S.members.push({id,name:g('name'),school:g('school'),phone:g('phone'),tsc:g('tsc'),idno:g('idno'),position:g('position'),role:'—',joined:'—',status:'Pending Verification',months:0,total:0,photo:REG.photo,scan:REG.scan,user:uu,pass:hp,
+   ben:{n:g('bn'),id:g('bid'),r:g('brel'),p:g('bphone'),photo:REG.ben,s:'Pending Verification'},
+   nok:{n:g('kn'),id:g('kid'),p:g('kphone')}});
+  audit('Registration Portal','Member registered',`${g('name')} · ${g('school')} · ${id} · TSC ${g('tsc')} · username ${uu} · position ${g('position')}`);
+  S.notifs.push({role:g('position')==='Chairperson'?'admin':'chair',u:true,txt:`New ${g('position')} registration awaiting your approval: ${g('name')} (${id})`});
+  REG.photo=null;REG.ben=null;REG.scan=null;updateRegBoxes();
+  $('#regForm').reset();$('#consent').checked=false;
+  ACT.showauth();
+  toast(`${ic('stamp')} Registration received — number <b>${id}</b>. ${g('position')==='Chairperson'?'The Administrator will approve &amp; activate you.':'The Chairperson will approve &amp; activate you.'} Then sign in with username <b>${uu}</b> and your password.`)},
+ /* EDIT 4c: admin password change stores a hash */
+ async changeAdminPass(fd){const cur=fd.get('cur'),nw=fd.get('new'),cf=fd.get('confirm');
+  if(cur!==S.creds.admin.p&&await sha256(cur)!==S.creds.admin.p){toast('Current password is incorrect','err');return}
+  if(nw.length<6){toast('New password must be at least 6 characters','err');return}
+  if(nw!==cf){toast('New passwords do not match','err');return}
+  S.creds.admin.p=await sha256(nw);audit('System Administrator','Password changed','Administrator password updated');render();toast(`${ic('stamp')} Administrator password changed successfully`)},
+ settings(fd){const s=S.settings;s.min=+fd.get('min')||s.min;s.death=+fd.get('death')||s.death;s.emer=+fd.get('emer')||s.emer;s.sms=fd.get('sms')==='Enabled';s.dual=fd.get('dual')==='Required';audit(ROLEACT[S.role],'Welfare parameters updated',`Min ${money(s.min)} · Death ${money(s.death)} · Emergency cap ${money(s.emer)}`);render();toast('Parameters saved and logged to the audit trail')},
+ /* EDIT 4d: temporary office-entry password is hashed */
+ async addMember(fd){const id='KCW-'+String(S.members.length+1).padStart(3,'0');const nm=fd.get('name');S.members.push({id,name:nm,school:fd.get('school'),phone:fd.get('phone')||'—',tsc:fd.get('tsc')||'—',idno:fd.get('idno')||'—',position:'Member',role:'—',joined:'—',status:'Pending Verification',months:0,total:0,photo:null,scan:null,user:id.toLowerCase(),pass:await sha256('kecsha2026'),ben:{n:'None on file',id:'—',r:'—',p:'—',s:'Not Registered',photo:null},nok:{n:'—',id:'—',p:'—'}});
+ audit('Secretary','Member registered (office entry)',`${nm} · ${fd.get('school')} · TSC ${fd.get('tsc')||'—'} · ${id} — pending Chairperson's approval`);
+ render();toast(`${ic('users')} <b>${nm}</b> registered as ${id} — awaiting the Chairperson's approval. Temp login <b>${id.toLowerCase()}</b> / kecsha2026`)},
+ payCon(fd){const me=SELF();if(!me){toast('No member record is linked to this office yet','err');return}
+  const amt=+fd.get('amt');
+  if(amt<S.settings.min){toast(`Rejected: amount is below the constitutional minimum of <b>${money(S.settings.min)}</b>`,'err');return}
+  if(!fd.get('ref')){toast('Enter the payment reference','err');return}
+  if(!PAY.ev){toast('Upload the payment evidence — <b>M-PESA screenshot or scanned bank receipt</b>','err');return}
+  S.contribs.unshift({id:'CT-'+String(1000+S.contribs.length+1),m:me.id,month:fd.get('month'),amt,ref:fd.get('ref').toUpperCase(),method:fd.get('method'),date:today(),status:'Pending Verification',v:false,evidence:PAY.ev,by:ROLEACT[S.role],note:''});
+  audit(ROLEACT[S.role],'Contribution submitted for verification',`${me.name} · ${fd.get('month')} · ${money(amt)} · ${fd.get('method')} · ref ${fd.get('ref').toUpperCase()}`);
+  if(S.role==='treasurer'){S.notifs.push({role:'chair',u:true,txt:`Treasurer's own contribution ${money(amt)} (${fd.get('month')}) needs your countersignature.`})}
+  else{S.notifs.push({role:'treasurer',u:true,txt:`${me.name} submitted ${money(amt)} (${fd.get('month')}) — evidence awaiting your verification.`})}
+  PAY.ev=null;render();
+  toast(S.role==='treasurer'?`${ic('coins')} <b>${money(amt)}</b> submitted — awaiting the <b>Chairperson's countersignature</b> (Article 16)`:
+        `${ic('coins')} <b>${money(amt)}</b> for ${fd.get('month')} submitted — the Treasurer has been notified to verify it`)},
+ recordCon(fd){const amt=+fd.get('amt');if(amt<S.settings.min){toast(`Rejected: amount is below the constitutional minimum of <b>${money(S.settings.min)}</b>`,'err');return}
+ if(!S.members.some(m=>m.id===fd.get('m'))){toast('Select a registered member','err');return}
+ const m=fd.get('m');S.contribs.unshift({id:'CT-'+String(1000+S.contribs.length+1),m,month:fd.get('month'),amt,ref:fd.get('ref').toUpperCase(),method:'Office entry',date:today(),status:'Verified',v:true,evidence:null,by:'Treasurer',note:''});
+ const mm=S.members.find(x=>x.id===m);if(mm){mm.total+=amt;mm.months+=1;if(mm.arrears===fd.get('month'))delete mm.arrears}
+ audit('Treasurer','Contribution recorded',`${memName(m)} · ${fd.get('month')} · ${money(amt)}`);render();toast(`${ic('coins')} ${money(amt)} recorded for <b>${memName(m)}</b>`)},
+ openCase(fd){const id='WC-'+new Date().getFullYear()+'-'+String(S.cases.length+1).padStart(3,'0');const docs=fd.get('type').startsWith('Death')?{'Death Certificate':false,'Burial Permit':false,'Beneficiary ID':false,"Chief's Letter":false}:{'Supporting Report':false,'ID Copy':false};
+ const who=fd.get('member')==='DEC'?'Deceased member — beneficiary claim':`${memName(fd.get('member'))} (${fd.get('member')})`;
+ S.cases.unshift({id,type:fd.get('type'),member:who,ben:fd.get('type').startsWith('Death')?'Written beneficiary':'Self',amt:+fd.get('amt')||S.settings.emer,status:'Awaiting Documents',opened:today(),note:fd.get('desc'),docs});
+ audit('Secretary','Welfare case opened',`${id} · ${fd.get('type')}`);render();toast(`${ic('alert')} Case <b>${id}</b> opened — awaiting documents`)},
+ emergency(fd){const me=SELF();if(!me){toast('No member record is linked to this office yet','err');return}
+  const id='WC-'+new Date().getFullYear()+'-'+String(S.cases.length+1).padStart(3,'0');
+  S.cases.unshift({id,type:'Emergency — '+fd.get('cat'),member:`${me.name} (${me.id})`,ben:'Self',amt:Math.min(+fd.get('amt'),S.settings.emer),status:'Awaiting Documents',opened:today(),note:fd.get('desc'),docs:{'Supporting Report':false,'ID Copy':true}});
+  audit(ROLEACT[S.role],'Emergency request submitted',`${id} · ${fd.get('cat')} · ${me.name}`);
+  S.notifs.push({role:'secretary',u:true,txt:`New emergency request ${id} from ${me.name}.`});
+  render();toast(`${ic('stamp')} Request <b>${id}</b> submitted — the Secretary has been notified`)},
+ beneficiary(fd){const me=ME();me.ben={n:fd.get('n'),id:fd.get('bid'),r:fd.get('r'),p:fd.get('p')||'—',photo:me.ben.photo,s:'Pending Verification'};audit('Member','Beneficiary change submitted',`${me.name} → ${fd.get('n')} · ID ${fd.get('bid')} (${fd.get('r')})`);S.notifs.push({role:'secretary',u:true,txt:`Beneficiary change submitted by ${me.name} — verification required.`});render();toast('Beneficiary update submitted for the Secretary\u2019s verification')},
+ announce(fd){S.ann.unshift({date:today(),txt:fd.get('txt')});audit('Secretary','Announcement issued',fd.get('txt').slice(0,60)+'…');S.notifs.push({role:'member',u:true,txt:fd.get('txt')});render();toast(`${ic('meg')} Announcement sent to all members`)},
+ agendaItem(fd){if(!S.meetings.length)return;S.meetings[0].agenda.push(fd.get('item'));audit('Secretary','Agenda item added',fd.get('item'));render();toast('Agenda item added')},
+ minutes(fd){audit('Secretary','Minutes drafted','Meeting minutes draft saved');render();toast('Minutes draft saved — will be adopted at the meeting')},
+ profile(fd){const me=ME();me.phone=fd.get('phone');me.nok.p=fd.get('kp')||me.nok.p;render();toast('Contact details updated')}};
+
+/* ================= EVENTS & INIT ================= */
+/* EDIT 3b/3c: every click and every form submission now triggers a cloud save */
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act;
+ if(a==='nav'&&el.id&&el.id.startsWith('nb-'))go(el.dataset.id);else if(ACT[a]){ACT[a](el.dataset.id,el);queuePersist()}});
+document.addEventListener('submit',e=>{const f=e.target;if(f.dataset.form){e.preventDefault();FORMS[f.dataset.form](new FormData(f));queuePersist()}});
+document.addEventListener('click',e=>{if(!e.target.closest('.bellwrap'))$('#bellPanel').classList.add('hidden')});
+function filterMem(q){q=q.toLowerCase();const wrap=$('#memwrap');if(!wrap)return;wrap.querySelectorAll('tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none'})}
+$('#cropApply').onclick=applyCrop;
+$('#cropCancel').onclick=()=>$('#cropModal').classList.add('hidden');
+$('#cropZoom').oninput=e=>{CR.zoom=+e.target.value;pos()};
+(()=>{const cw=$('#cropWrap');let drag=null;
+cw.addEventListener('pointerdown',e=>{drag={x:e.clientX-CR.dx,y:e.clientY-CR.dy};cw.setPointerCapture(e.pointerId)});
+cw.addEventListener('pointermove',e=>{if(!drag)return;CR.dx=e.clientX-drag.x;CR.dy=e.clientY-drag.y;pos()});
+cw.addEventListener('pointerup',()=>drag=null);
+cw.addEventListener('pointercancel',()=>drag=null)})();
+setInterval(()=>{const n=new Date();const t=$('#clkT');if(t){t.textContent=n.toLocaleTimeString('en-KE');$('#clkD').textContent=n.toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · EAT'}},1000);
+/* EDIT 3d: load cloud data on start, and re-sync whenever the page/tab becomes visible */
+loadAll();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadAll()});
+</script>
+</body>
+</html>
