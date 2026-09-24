@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilifi County KECSHA Welfare Association</title>
+<meta name="description" content="Head Teachers' Welfare Fund portal for Kilifi County KECSHA Welfare Association, managing registrations, contributions, welfare cases, and governance.">
+<meta property="og:title" content="Kilifi County KECSHA Welfare Association">
+<meta property="og:description" content="Head Teachers' Welfare Fund portal for Kilifi County KECSHA Welfare Association, managing registrations, contributions, welfare cases, and governance.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
  --deep:#062A1F; --green:#0C4634; --green2:#0E5A42; --green3:#E7EFE6;
@@ -15,6 +17,12 @@
  --gold:#E7A83A; --goldD:#A97911; --red:#C14B31; --teal:#1E7A6F; --blue:#2F6DA3;
  --disp:'Bricolage Grotesque',sans-serif; --body:'Public Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
 }
+.sync-status{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 11px;font-size:11.5px;font-weight:600;color:var(--mut)}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981;display:inline-block;animation:pulseDot 2s infinite}
+.sync-dot.syncing{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.sync-dot.error{background:var(--red);box-shadow:0 0 8px var(--red)}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.cloud-pill{display:inline-flex;align-items:center;gap:7px;background:#ffffff15;border:1px solid #ffffff30;border-radius:20px;padding:5px 12px;font-size:12px;color:#d8e4d2;font-weight:500}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.55}
@@ -242,7 +250,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.3px;background:#fff}
     <span class="crest-slot" data-size="56"></span>
     <div><b>Kilifi County KECSHA<br>Welfare Association</b><small>Head Teachers · Kilifi County</small></div>
    </div>
-   <div class="lest">Registered welfare association<br>Kilifi · Kenya · Est. 2023</div>
+   <div class="lest">
+    <div class="cloud-pill" style="margin-bottom:6px"><span class="sync-dot"></span> Realtime Cloud Database</div>
+    Registered welfare association<br>Kilifi · Kenya · Est. 2023
+   </div>
   </div>
   <div class="lgrid">
    <div class="rv" style="animation-delay:.08s">
@@ -381,6 +392,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.3px;background:#fff}
   <div class="band"></div>
   <div class="topbar"><div class="topin">
    <div class="pghead"><h2 id="pgT">Dashboard</h2><p id="pgS"></p></div>
+   <div class="sync-status" id="cloudSyncStatus" title="Cloud Database Connection" style="margin-left:auto">
+    <span class="sync-dot"></span>
+    <span class="sync-text">Cloud Database Synced</span>
+   </div>
    <div class="clock"><b id="clkT">--:--:--</b><span id="clkD"></span></div>
    <div class="bellwrap">
     <button class="bellbtn" data-act="bell" aria-label="Notifications"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.6 5.2 2 6H4c.4-.8 2-2 2-6z"/><path d="M10 18.5a2.2 2.2 0 0 0 4 0"/></svg><span class="dot hidden" id="bellDot">0</span></button>
@@ -409,7 +424,84 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.3px;background:#fff}
 
 <div id="toasts"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js';
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  getDoc, 
+  getDocs, 
+  getDocFromServer, 
+  collection, 
+  onSnapshot 
+} from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  projectId: "gen-lang-client-0737065925",
+  appId: "1:264413126804:web:967aac8c7b5432c5d75481",
+  apiKey: "AIzaSyDQMqGkRZId8XWR93SYX0jLU34yYeJ-flU",
+  authDomain: "gen-lang-client-0737065925.firebaseapp.com",
+  firestoreDatabaseId: "ai-studio-kecshawelfare-862eb613-2e7f-4100-ad6f-ad227e851faf",
+  storageBucket: "gen-lang-client-0737065925.firebasestorage.app",
+  messagingSenderId: "264413126804"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+
+const OperationType = {
+  CREATE: 'create',
+  UPDATE: 'update',
+  DELETE: 'delete',
+  LIST: 'list',
+  GET: 'get',
+  WRITE: 'write'
+};
+
+function handleFirestoreError(error, operationType, path) {
+  const errInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {},
+    operationType,
+    path
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+}
+
+function updateSyncBadge(status) {
+  const el = document.getElementById('cloudSyncStatus');
+  const dot = el ? el.querySelector('.sync-dot') : null;
+  const txt = el ? el.querySelector('.sync-text') : null;
+  if (!el || !dot || !txt) return;
+  if (status === 'online') {
+    dot.className = 'sync-dot';
+    txt.textContent = 'Cloud Database Synced';
+    el.title = 'Real-time database connected. Any changes are synced immediately to all devices.';
+  } else if (status === 'syncing') {
+    dot.className = 'sync-dot syncing';
+    txt.textContent = 'Syncing to cloud…';
+  } else if (status === 'offline') {
+    dot.className = 'sync-dot error';
+    txt.textContent = 'Connecting…';
+  } else if (status === 'error') {
+    dot.className = 'sync-dot error';
+    txt.textContent = 'Sync alert';
+  }
+}
+
+async function testConnection() {
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+    updateSyncBadge('online');
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.error("Please check your Firebase configuration.");
+      updateSyncBadge('offline');
+    }
+  }
+}
+
 /* ================= ICONS / CREST ================= */
 const I={
 grid:'<rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>',
@@ -434,7 +526,7 @@ function crestHTML(s){return S.brand.logo
  :`<span style="display:block;width:${s}px;height:${s}px;filter:drop-shadow(0 4px 12px #0006)">${CREST}</span>`}
 function refreshCrests(){$$('.crest-slot').forEach(el=>el.innerHTML=crestHTML(+el.dataset.size))}
 
-/* ================= STATE — EMPTY, READY FOR YOUR OWN DATA ================= */
+/* ================= STATE — REALTIME FIRESTORE DATA ================= */
 const S={
  role:null,page:null,meId:null,
  brand:{logo:null},
@@ -442,52 +534,210 @@ const S={
  settings:{min:1000,death:150000,emer:30000,sms:true,dual:true},
  officers:{admin:{name:'System Administrator',status:'Active'},chair:{name:'Vacant',status:'Vacant'},secretary:{name:'Vacant',status:'Vacant'},treasurer:{name:'Vacant',status:'Vacant'}},
  members:[],contribs:[],payouts:[],cases:[],meetings:[],ann:[],notifs:[],
- audit:[{t:new Date().toLocaleString('en-KE',{dateStyle:'medium',timeStyle:'short'}),ts:Date.now(),who:'System',act:'System initialised',det:'Fresh system — ready for registration and data entry'}],
+ audit:[{t:new Date().toLocaleString('en-KE',{dateStyle:'medium',timeStyle:'short'}),ts:Date.now(),who:'System',act:'System initialised',det:'Realtime cloud database ready for cross-device access'}],
  ch:[]};
 const REG={photo:null,ben:null,scan:null};
 const PAY={ev:null};
 
-/* ================= SUPABASE SYNC LAYER ================= */
-const SUPABASE_URL='https://YOUR-PROJECT.supabase.co';   // ← PASTE HERE: your Project URL
-const SUPABASE_ANON_KEY='YOUR-ANON-PUBLIC-KEY';          // ← PASTE HERE: your anon public key
-const DB=(!SUPABASE_URL.includes('YOUR-PROJECT')&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+/* ================= FIRESTORE REALTIME SYNC ENGINE ================= */
 const S_MAP={members:()=>S.members,contribs:()=>S.contribs,payouts:()=>S.payouts,cases:()=>S.cases,meetings:()=>S.meetings,anns:()=>S.ann,notifs:()=>S.notifs,audit_log:()=>S.audit};
 const LAST={};
 async function sha256(t){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return 'h-'+t}}
-function compressImage(src,maxW,q){maxW=maxW||800;q=q||0.65;return new Promise(res=>{const i=new Image();i.onload=()=>{const s=Math.min(1,maxW/i.width);const c=document.createElement('canvas');c.width=Math.round(i.width*s);c.height=Math.round(i.height*s);c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',q))};i.onerror=()=>res(src);i.src=src})}
-async function persistAll(){if(!DB)return;
+function compressImage(src,maxW,q){maxW=maxW||600;q=q||0.7;return new Promise(res=>{const i=new Image();i.onload=()=>{const s=Math.min(1,maxW/i.width);const c=document.createElement('canvas');c.width=Math.round(i.width*s);c.height=Math.round(i.height*s);c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',q))};i.onerror=()=>res(src);i.src=src})}
+
+let isSyncing = false;
+async function persistAll(){
+ if (isSyncing) return;
+ isSyncing = true;
+ updateSyncBadge('syncing');
  try{
-  for(const t of Object.keys(S_MAP)){
-   const rows=S_MAP[t]();const snap=JSON.stringify(rows);if(LAST[t]===snap)continue;LAST[t]=snap;
-   const data=rows.map(r=>{if(!r._id)r._id=(crypto.randomUUID?crypto.randomUUID():'x'+Math.random().toString(36).slice(2));return{id:r._id,data:r}});
-   if(data.length)await DB.from(t).upsert(data,{onConflict:'id'});
+  for(const [t, getFn] of Object.entries(S_MAP)){
+   const rows=getFn();const snap=JSON.stringify(rows);if(LAST[t]===snap)continue;LAST[t]=snap;
+   for(const r of rows){
+    if(!r._id)r._id=(r.id||(crypto.randomUUID?crypto.randomUUID():'x'+Math.random().toString(36).slice(2)));
+    const docId=String(r.id||r._id);
+    await setDoc(doc(db,t,docId),{id:docId,data:r});
+   }
   }
-  await DB.from('kv').upsert([{key:'settings',value:S.settings},{key:'officers',value:S.officers},{key:'creds',value:S.creds},{key:'brand',value:S.brand}]);
- }catch(e){console.warn('Supabase sync failed',e)}}
-let _pt=null;function queuePersist(){clearTimeout(_pt);_pt=setTimeout(persistAll,800)}
-async function loadAll(){
- if(!DB){if(S.creds.admin.p==='admin123')S.creds.admin.p=await sha256('admin123');refreshCrests();updateRegBoxes();return}
- try{
-  const names=['members','contribs','payouts','cases','meetings','anns','notifs','audit_log'];
-  const ts=await Promise.all(names.map(t=>DB.from(t).select('data,created_at')));
-  const rows=ts.map(r=>(r.data||[]).sort((a,b)=>a.created_at<b.created_at?-1:1).map(x=>x.data));
-  const [mem,con,pay,cas,met,ann,not,aud]=rows;
-  if(mem.length)S.members=mem.sort((a,b)=>a.id.localeCompare(b.id));
-  if(con.length)S.contribs=con.sort((a,b)=>b.id.localeCompare(a.id));
-  if(pay.length)S.payouts=pay;
-  if(cas.length)S.cases=cas.slice().reverse();
-  if(met.length)S.meetings=met;
-  if(ann.length)S.ann=ann.slice().reverse();
-  if(not.length)S.notifs=not;
-  if(aud.length)S.audit=aud.sort((a,b)=>(b.ts||0)-(a.ts||0));
-  const kv=await DB.from('kv').select('key,value');
-  (kv.data||[]).forEach(r=>{if(r.key==='settings')Object.assign(S.settings,r.value);if(r.key==='officers')Object.assign(S.officers,r.value);if(r.key==='creds')Object.assign(S.creds,r.value);if(r.key==='brand')Object.assign(S.brand,r.value)});
-  if(S.creds.admin.p==='admin123'){S.creds.admin.p=await sha256('admin123');persistAll()}
-  Object.keys(S_MAP).forEach(t=>LAST[t]=JSON.stringify(S_MAP[t]()));
- }catch(e){console.warn('Supabase load failed',e)}
+  await setDoc(doc(db,'kv','settings'),{key:'settings',value:S.settings});
+  await setDoc(doc(db,'kv','officers'),{key:'officers',value:S.officers});
+  await setDoc(doc(db,'kv','creds'),{key:'creds',value:S.creds});
+  await setDoc(doc(db,'kv','brand'),{key:'brand',value:S.brand});
+  updateSyncBadge('online');
+ }catch(e){
+  console.warn('Firestore sync failed',e);
+  updateSyncBadge('error');
+  handleFirestoreError(e,OperationType.WRITE,'persistAll');
+ }finally{
+  isSyncing = false;
+ }
+}
+
+let _pt=null;
+function queuePersist(){clearTimeout(_pt);_pt=setTimeout(persistAll,600)}
+
+function renderIfAppropriate(){
  const tag=(document.activeElement||{}).tagName;
  if(S.role&&!['INPUT','TEXTAREA','SELECT'].includes(tag))render();
- refreshCrests();updateRegBoxes();}
+ refreshCrests();updateRegBoxes();bellCount();
+}
+
+let syncInitialized = false;
+function setupRealtimeSync(){
+ if (syncInitialized) return;
+ syncInitialized = true;
+
+ // Real-time members sync
+ onSnapshot(collection(db,'members'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  if(list.length>0){
+   S.members=list.sort((a,b)=>(a.id||'').localeCompare(b.id||''));
+   LAST['members']=JSON.stringify(S.members);
+  }
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'members'));
+
+ // Real-time contributions sync
+ onSnapshot(collection(db,'contribs'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  S.contribs=list.sort((a,b)=>(b.id||'').localeCompare(a.id||''));
+  LAST['contribs']=JSON.stringify(S.contribs);
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'contribs'));
+
+ // Real-time welfare cases sync
+ onSnapshot(collection(db,'cases'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  S.cases=list.slice().reverse();
+  LAST['cases']=JSON.stringify(S.cases);
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'cases'));
+
+ // Real-time payouts sync
+ onSnapshot(collection(db,'payouts'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  S.payouts=list;
+  LAST['payouts']=JSON.stringify(S.payouts);
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'payouts'));
+
+ // Real-time meetings sync
+ onSnapshot(collection(db,'meetings'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  S.meetings=list;
+  LAST['meetings']=JSON.stringify(S.meetings);
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'meetings'));
+
+ // Real-time announcements sync
+ onSnapshot(collection(db,'anns'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  S.ann=list.slice().reverse();
+  LAST['anns']=JSON.stringify(S.ann);
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'anns'));
+
+ // Real-time notifications sync
+ onSnapshot(collection(db,'notifs'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  S.notifs=list;
+  LAST['notifs']=JSON.stringify(S.notifs);
+  bellCount();
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'notifs'));
+
+ // Real-time audit log sync
+ onSnapshot(collection(db,'audit_log'),snapshot=>{
+  const list=[];
+  snapshot.forEach(docSnap=>{
+   const d=docSnap.data();
+   list.push(d.data||d);
+  });
+  if(list.length>0){
+   S.audit=list.sort((a,b)=>(b.ts||0)-(a.ts||0));
+   LAST['audit_log']=JSON.stringify(S.audit);
+   renderIfAppropriate();
+  }
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'audit_log'));
+
+ // Real-time key-value config sync
+ onSnapshot(collection(db,'kv'),snapshot=>{
+  snapshot.forEach(docSnap=>{
+   const k=docSnap.id;
+   const v=docSnap.data().value;
+   if(v){
+    if(k==='settings')Object.assign(S.settings,v);
+    if(k==='officers')Object.assign(S.officers,v);
+    if(k==='creds')Object.assign(S.creds,v);
+    if(k==='brand'){Object.assign(S.brand,v);refreshCrests();}
+   }
+  });
+  renderIfAppropriate();
+  updateSyncBadge('online');
+ },err=>handleFirestoreError(err,OperationType.LIST,'kv'));
+}
+
+async function initDatabase(){
+ try{
+  const credsSnap=await getDoc(doc(db,'kv','creds'));
+  if(!credsSnap.exists()){
+   if(S.creds.admin.p==='admin123')S.creds.admin.p=await sha256('admin123');
+   await setDoc(doc(db,'kv','creds'),{key:'creds',value:S.creds});
+   await setDoc(doc(db,'kv','settings'),{key:'settings',value:S.settings});
+   await setDoc(doc(db,'kv','officers'),{key:'officers',value:S.officers});
+   await setDoc(doc(db,'kv','brand'),{key:'brand',value:S.brand});
+   await setDoc(doc(db,'audit_log','init'),{id:'init',data:S.audit[0]});
+  }else{
+   const v=credsSnap.data().value;
+   if(v)Object.assign(S.creds,v);
+  }
+ }catch(err){
+  console.warn('initDatabase note:',err);
+ }
+}
+
+async function loadAll(){
+ await testConnection();
+ await initDatabase();
+ setupRealtimeSync();
+ refreshCrests();updateRegBoxes();
+}
 
 /* ================= HELPERS ================= */
 const ME=()=>S.members.find(m=>m.id===S.meId)||null;
@@ -962,7 +1212,7 @@ const ACT={
   if(posKey){S.officers[posKey]={name:m.name,status:'Active'};S.creds[posKey]={u:m.user,p:m.pass};m.role=m.position}
   audit('Chairperson','Registration approved & activated',`${m.name} · ${m.id} · position ${m.position} · username ${m.user}`);
   render();toast(`${ic('stamp')} <b>${m.name}</b> approved &amp; activated — login username: <b>${m.user}</b> (password is the one they registered with)`);},
- declinemem:id=>{const m=S.members.find(x=>x.id===id);const r=prompt('Reason for declining (recorded in audit trail):');if(r===null)return;m.status='Declined';audit(ROLEACT[S.role],'Registration declined',m.name+' — '+r);render();toast(`Registration for ${m.name} declined`,'err')},
+ declinemem:id=>{const m=S.members.find(x=>x.id===id);const r=safePrompt('Reason for declining (recorded in audit trail):');if(r===null)return;m.status='Declined';audit(ROLEACT[S.role],'Registration declined',m.name+' — '+r);render();toast(`Registration for ${m.name} declined`,'err')},
  vpay:id=>{const c=S.contribs.find(x=>x.id===id);if(!c||c.status!=='Pending Verification')return;
   if(S.role==='treasurer'){const self=SELF();if(self&&c.m===self.id){toast(`${ic('lock')} <b>Article 16:</b> you cannot verify your own contribution. The Chairperson has been notified to countersign it.`,'err');S.notifs.push({role:'chair',u:true,txt:`Treasurer's own contribution ${money(c.amt)} (${c.month}) needs your countersignature.`});return}}
   c.status='Verified';c.v=true;
@@ -1084,6 +1334,12 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if
 document.addEventListener('submit',e=>{const f=e.target;if(f.dataset.form){e.preventDefault();FORMS[f.dataset.form](new FormData(f));queuePersist()}});
 document.addEventListener('click',e=>{if(!e.target.closest('.bellwrap'))$('#bellPanel').classList.add('hidden')});
 function filterMem(q){q=q.toLowerCase();const wrap=$('#memwrap');if(!wrap)return;wrap.querySelectorAll('tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none'})}
+window.filterMem = filterMem;
+window.S = S;
+window.ACT = ACT;
+window.FORMS = FORMS;
+window.loadAll = loadAll;
+window.queuePersist = queuePersist;
 $('#cropApply').onclick=applyCrop;
 $('#cropCancel').onclick=()=>$('#cropModal').classList.add('hidden');
 $('#cropZoom').oninput=e=>{CR.zoom=+e.target.value;pos()};

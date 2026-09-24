@@ -1,0 +1,8 @@
+{
+  "name": "Kilifi County KECSHA Welfare Association",
+  "description": "Head Teachers' Welfare Fund portal for Kilifi County KECSHA Welfare Association, managing registrations, contributions, welfare cases, and governance.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "kecsha-welfare",
+  "version": "1.0.0",
+  "description": "Kilifi County KECSHA Welfare Association portal",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'No build required'",
+    "lint": "node --check server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "firebase": "^12.19.0"
+  }
+}

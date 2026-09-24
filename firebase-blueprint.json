@@ -1,0 +1,162 @@
+{
+  "entities": {
+    "member": {
+      "title": "Member",
+      "description": "Head teacher welfare association member record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "school": { "type": "string" },
+        "phone": { "type": "string" },
+        "tsc": { "type": "string" },
+        "idno": { "type": "string" },
+        "position": { "type": "string" },
+        "role": { "type": "string" },
+        "joined": { "type": "string" },
+        "status": { "type": "string" },
+        "months": { "type": "number" },
+        "total": { "type": "number" },
+        "user": { "type": "string" }
+      },
+      "required": ["id", "name", "school"]
+    },
+    "contribution": {
+      "title": "Contribution",
+      "description": "Monthly welfare fund contribution",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "m": { "type": "string" },
+        "month": { "type": "string" },
+        "amt": { "type": "number" },
+        "ref": { "type": "string" },
+        "method": { "type": "string" },
+        "date": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "m", "amt", "month", "status"]
+    },
+    "case": {
+      "title": "WelfareCase",
+      "description": "Welfare assistance or death benefit case",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "member": { "type": "string" },
+        "amt": { "type": "number" },
+        "status": { "type": "string" },
+        "opened": { "type": "string" }
+      },
+      "required": ["id", "type", "member", "status"]
+    },
+    "payout": {
+      "title": "Payout",
+      "description": "Disbursement payment record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "case": { "type": "string" },
+        "to": { "type": "string" },
+        "amt": { "type": "number" },
+        "date": { "type": "string" },
+        "ref": { "type": "string" }
+      },
+      "required": ["id", "case", "amt", "ref"]
+    },
+    "meeting": {
+      "title": "Meeting",
+      "description": "Executive or AGM meeting minutes and agenda",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "title"]
+    },
+    "announcement": {
+      "title": "Announcement",
+      "description": "Association broadcast announcement",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "txt": { "type": "string" }
+      },
+      "required": ["date", "txt"]
+    },
+    "notification": {
+      "title": "Notification",
+      "description": "Role-based notification",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string" },
+        "u": { "type": "boolean" },
+        "txt": { "type": "string" }
+      },
+      "required": ["role", "txt"]
+    },
+    "auditEntry": {
+      "title": "AuditEntry",
+      "description": "Financial and operational audit record",
+      "type": "object",
+      "properties": {
+        "t": { "type": "string" },
+        "ts": { "type": "number" },
+        "who": { "type": "string" },
+        "act": { "type": "string" },
+        "det": { "type": "string" }
+      },
+      "required": ["who", "act", "t"]
+    },
+    "systemKv": {
+      "title": "SystemKv",
+      "description": "Key-value pair for association settings, officers, creds, and brand",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "value": { "type": "object" }
+      },
+      "required": ["key", "value"]
+    }
+  },
+  "firestore": {
+    "/members/{memberId}": {
+      "schema": "member",
+      "description": "Collection of association member profiles and credentials"
+    },
+    "/contribs/{contribId}": {
+      "schema": "contribution",
+      "description": "Monthly contribution records with receipts and verification status"
+    },
+    "/cases/{caseId}": {
+      "schema": "case",
+      "description": "Emergency and death benefit claim cases"
+    },
+    "/payouts/{payoutId}": {
+      "schema": "payout",
+      "description": "Disbursement records for approved cases"
+    },
+    "/meetings/{meetingId}": {
+      "schema": "meeting",
+      "description": "Meeting notices, agendas, and minutes"
+    },
+    "/anns/{annId}": {
+      "schema": "announcement",
+      "description": "Broadcast announcements for members"
+    },
+    "/notifs/{notifId}": {
+      "schema": "notification",
+      "description": "Role-based notification items"
+    },
+    "/audit_log/{auditId}": {
+      "schema": "auditEntry",
+      "description": "Immutable governance and financial audit trail"
+    },
+    "/kv/{keyId}": {
+      "schema": "systemKv",
+      "description": "Global association settings and configuration documents"
+    }
+  }
+}
